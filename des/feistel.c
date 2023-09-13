@@ -18,4 +18,21 @@ int cipher(int l, int r)
 		l = res ^ r;
 		r = tmp_l;
 	}
+	return 0;
+}
+
+int uncipher(int r, int l)
+{
+	int k = 16;
+	int res = 0;
+	int tmp_l = 0;
+
+	for (int n = k; n > 0; n--) 
+	{
+		tmp_l = l;
+		res = f(l, n);
+		l = res ^ r;
+		r = tmp_l;
+	}
+	return 0;
 }
