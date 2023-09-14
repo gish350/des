@@ -1,4 +1,4 @@
-
+#include "feistel.h"
 
 int f(int l, int n) 
 {
@@ -7,7 +7,7 @@ int f(int l, int n)
 
 int cipher(int l, int r)
 {
-	int k = 16;
+	int k = 3;
 	int res = 0;
 	int tmp_l = 0;
 	
@@ -18,12 +18,16 @@ int cipher(int l, int r)
 		l = res ^ r;
 		r = tmp_l;
 	}
+	r = l;
+	l = tmp_l;
+	
+	printf("L: %d R: %d \n", l, r);
 	return 0;
 }
 
 int uncipher(int r, int l)
 {
-	int k = 16;
+	int k = 3;
 	int res = 0;
 	int tmp_l = 0;
 
@@ -34,5 +38,6 @@ int uncipher(int r, int l)
 		l = res ^ r;
 		r = tmp_l;
 	}
+	printf("L: %d R: %d", l, r);
 	return 0;
 }

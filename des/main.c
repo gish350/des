@@ -2,6 +2,8 @@
 #include "feistel.h"
 int main()
 {
-	printf("Hello world");
+	cipher(100, 200);
+	uncipher(99, 203);
+	
 	return 0;
 }
