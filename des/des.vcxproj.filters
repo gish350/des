@@ -21,12 +21,15 @@
     <ClCompile Include="feistel.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="block.c">
+    <ClCompile Include="permutation.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="feistel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="permutation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
