@@ -3,23 +3,25 @@
 
 int* make_ip(int initial_64[])
 {
-	int first = 58;
+	int first = 57;
 	int cur = first;
 	static int ip[64] = { 0 };
 	for (int i = 0; i < 64; i++)
 	{
+		if (i % 8 == 0 && i != 0)
+		{
+			first += 2;
+			cur = first;
+		}
+		if (i == 32)
+		{
+			first -= 9;
+			cur = first;
+		}
 		ip[i] = initial_64[cur];
 		cur -= 8;
-		if (i == 32) 
-		{
-			first -= 8;
-			cur = first;
-		}
-		if (i % 8 == 0 && i != 0) 
-		{
-			first -= 2;
-			cur = first;
-		}
+		
+		
 	}
 	return ip;
 }
