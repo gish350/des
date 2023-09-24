@@ -16,8 +16,12 @@ int main()
 		initial[i] = i + 1;
 	}
 
-	int new_arr[64] = { 0 };
-	new_arr[0] = make_ip(initial);
-	
+	int initital_arr[64] = { 0 };
+	int ip[64] = { 0 };
+	int pc1[56] = { 0 };
+	int* pIp = make_ip(initial);
+	memcpy(ip, pIp, 256);
+	int* pPc1 = make_pc1(ip);
+	memcpy(pc1, pPc1, 224);
 	return 0;
 }
