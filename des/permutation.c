@@ -78,7 +78,7 @@ int* get_pc2(int h[], int l[])
 	return pc2;
 }
 
-void get_key_elements(int iteration, int h[], int l[], int* retH, int* retL)
+void get_key_elements(int iteration, int* h[], int* l[])
 {
 	int sl = 0;
 	if (iteration < 3 || iteration == 9 || iteration == 16) sl = 1;
@@ -86,8 +86,8 @@ void get_key_elements(int iteration, int h[], int l[], int* retH, int* retL)
 
 	for (int i = 0; i < 28; i++)
 	{
-		retH[i] = h[i] << sl;
-		retL[i] = l[i] << sl;
+		h[i] = *h[i] << sl;
+		h[i] = *l[i] << sl;
 	}
 }
 
