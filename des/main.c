@@ -17,7 +17,7 @@ int main()
 		initial[i] = i + 1;
 	}
 
-	int initital_arr[64] = { 0 };
+	/*int initital_arr[64] = { 0 };
 	int ip[64] = { 0 };
 	int pc1[56] = { 0 };
 	int* pIp = make_ip(initial);
@@ -27,6 +27,7 @@ int main()
 
 	int* outH = GlobalAlloc(0x0000 | 0x0040, 112);
 	int* outL = GlobalAlloc(0x0000 | 0x0040, 112);
-	split_pc1(pc1, outH, outL);
+	split_pc1(pc1, outH, outL);*/
+	make_permutation(initial);
 	return 0;
 }

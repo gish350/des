@@ -98,8 +98,10 @@ void make_permutation(int initial_64[])
 	int h[28] = { 0 };
 	int l[28] = { 0 };
 	int pc2[48] = { 0 };
-	ip[0] = make_ip(initial_64);
-	pc1[0] = make_pc1(ip);
+	int* pIp = make_ip(initial_64);
+	memcpy(ip, pIp, 256);
+	int* pPc1 = make_pc1(ip);
+	memcpy(pc1, pPc1, 224);
 	split_pc1(pc1, h, l);
 
 	for (int i = 1; i < 17; i++)
