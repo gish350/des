@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h>
 #include "feistel.h"
 #include "permutation.h"
 int main()
@@ -23,5 +24,9 @@ int main()
 	memcpy(ip, pIp, 256);
 	int* pPc1 = make_pc1(ip);
 	memcpy(pc1, pPc1, 224);
+
+	int* outH = GlobalAlloc(0x0000 | 0x0040, 112);
+	int* outL = GlobalAlloc(0x0000 | 0x0040, 112);
+	split_pc1(pc1, outH, outL);
 	return 0;
 }
