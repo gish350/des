@@ -112,8 +112,10 @@ void make_permutation(int initial_64[])
 	{
 		get_key_elements(i, h, l);
 		int *pPc2 = get_pc2(h, l);
-		memcpy(basePc2 + j, pPc2, 192);
-		j += 192;
+
+		int* curLoc = basePc2 + j;
+		memcpy(curLoc, pPc2, 192);
+		j += 48;
 	}
 	
 }
