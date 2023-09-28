@@ -78,7 +78,7 @@ int* get_pc2(int h[], int l[])
 	return pc2;
 }
 
-void get_key_elements(int iteration, int* h[], int* l[])
+void get_key_elements(int iteration, int* h, int* l)
 {
 	int sl = 0;
 	if (iteration < 3 || iteration == 9 || iteration == 16) sl = 1;
@@ -86,8 +86,8 @@ void get_key_elements(int iteration, int* h[], int* l[])
 
 	for (int i = 0; i < 28; i++)
 	{
-		h[i] = *h[i] << sl;
-		h[i] = *l[i] << sl;
+		h[i] = h[i] << sl;
+		l[i] = l[i] << sl;
 	}
 }
 
@@ -97,17 +97,23 @@ void make_permutation(int initial_64[])
 	int pc1[56] = { 0 };
 	int h[28] = { 0 };
 	int l[28] = { 0 };
-	int pc2[48] = { 0 };
 	int* pIp = make_ip(initial_64);
 	memcpy(ip, pIp, 256);
 	int* pPc1 = make_pc1(ip);
 	memcpy(pc1, pPc1, 224);
 	split_pc1(pc1, h, l);
 
+
+	int pc2_table[16][48] = { 0 };
+	int* basePc2 = *pc2_table;
+
+	int j = 0;
 	for (int i = 1; i < 17; i++)
 	{
 		get_key_elements(i, h, l);
-		pc2[0] = get_pc2(h, l);
+		int *pPc2 = get_pc2(h, l);
+		memcpy(basePc2 + j, pPc2, 192);
+		j += 192;
 	}
 	
 }
