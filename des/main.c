@@ -12,10 +12,15 @@ int main()
 	//uncipher(99, 203);
 
 	int initial[64] = { 0 };
-	for (int i = 0; i < 64; i++)
+	for (int i = 0; i < 32; i++)
 	{
-		initial[i] = i + 1;
+		initial[i] = 1;
 	}
+	for (int i = 32; i < 64; i++)
+	{
+		initial[i] = 0;
+	}
+	
 
 	/*int initital_arr[64] = { 0 };
 	int ip[64] = { 0 };

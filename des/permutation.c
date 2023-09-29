@@ -30,7 +30,7 @@ int* make_pc1(int ip_64[])
 {
 	static int pc1[56];
 	int j = 0;
-	for (int i = 0; i < 56; i++)
+	for (int i = 0; i < 56, j < 64; i++)
 	{
 		if (j % 7 != 0 || j == 0)	pc1[i] = ip_64[j];
 		else i--;
@@ -84,10 +84,16 @@ void get_key_elements(int iteration, int* h, int* l)
 	if (iteration < 3 || iteration == 9 || iteration == 16) sl = 1;
 	else sl = 2;
 
-	for (int i = 0; i < 28; i++)
+	int shH[28] = { 0 };
+	int shL[28] = { 0 };
+
+	for (int i = 27; i > -1; --i)
 	{
-		h[i] = h[i] << sl;
-		l[i] = l[i] << sl;
+		if (sl == 2 && i > 1 || sl == 1 && i > 0)
+		{
+			shH[i - sl] = h[i];
+			shL[i - sl] = l[i];
+		}
 	}
 }
 
