@@ -30,7 +30,7 @@ int* make_pc1(int ip_64[])
 {
 	static int pc1[56];
 	int j = 0;
-	for (int i = 0; i < 56, j < 64; i++)
+	for (int i = 0; i < 56 && j < 64; i++)
 	{
 		if (j % 7 != 0 || j == 0)	pc1[i] = ip_64[j];
 		else i--;
