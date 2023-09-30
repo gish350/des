@@ -4,9 +4,23 @@
 #include "permutation.h"
 int main()
 {
-	//char input[8] = {0};
-	//
-	//gets(input);
+	int block[64] = { 0 };
+	for (int i = 0; i < 48; i++)
+	{
+		block[i] = 1;
+	}
+	for (int i = 48; i < 64; i++)
+	{
+		block[i] = 0;
+	}
+	int ip[64] = { 0 };
+	int h1[32] = { 0 };
+	int l1[32] = { 0 };
+	int* pIp = make_ip(block);
+	memcpy(ip, pIp, 256);
+	split_block(ip, 32, h1, l1);
+
+
 
 	//cipher(100, 200);
 	//uncipher(99, 203);

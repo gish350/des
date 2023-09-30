@@ -39,15 +39,15 @@ int* make_pc1(int ip_64[])
 	return pc1;
 }
 
-void split_pc1(int pc1[], int* outH, int* outL)
+void split_block(int pc1[], int treshold,  int* outH, int* outL)
 {
 	int j = 0;
-	for (int i = 0; i < 28; i++) 
+	for (int i = 0; i < treshold; i++) 
 	{
 		outH[i] = pc1[j];
 		j++;
 	}
-	for (int i = 0; i < 28; i++)
+	for (int i = 0; i < treshold; i++)
 	{
 		outL[i] = pc1[j];
 		j++;
@@ -107,7 +107,7 @@ void make_permutation(int initial_64[])
 	memcpy(ip, pIp, 256);
 	int* pPc1 = make_pc1(ip);
 	memcpy(pc1, pPc1, 224);
-	split_pc1(pc1, h, l);
+	split_block(pc1, 28, h, l);
 
 
 	int pc2_table[16][48] = { 0 };
