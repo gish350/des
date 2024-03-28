@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <winDNS.h>
 #include <iostream>
+#include "ecb.h"
 
 // Коррекция ключа: требуется, чтобы сумма битов каждого байта ключа, 
 // включая контрольный, была нечетной (нечетный паритетный бит).
@@ -36,6 +37,7 @@ int main()
     const char plain_text[] = "plaint text ;)";
     QWORD key = 0xBEEFBABECAFEBABE;
     key_correction(&key);
+    pc1(&key);
         
     return 0;
 }

@@ -1,10 +1,12 @@
 #include <windows.h>
 #include <winDNS.h>
 
-void pc1(LPVOID key)
+
+void pc1(QWORD* key)
 {
-	BYTE* pKey = (BYTE*)key;
 	QWORD pc1_key = 0;
 
-	*(BYTE*)pc1_key = *(pKey + 7) && 0x1;
+	*(&pc1_key) = *(&pc1_key) | (*key & 0x40); // 57
+	*(&pc1_key) = *(&pc1_key) | (*key & 0x4000); // 49
+	*(&pc1_key) = *(&pc1_key) | (*key & 0x400000); // 41
 }

@@ -142,6 +142,9 @@
     <ClCompile Include="002_des.cpp" />
     <ClCompile Include="ecb.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ecb.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
