@@ -1,3 +1,3 @@
 #pragma once
 
-void pc1(QWORD* key);
+QWORD pc1(QWORD* key);
