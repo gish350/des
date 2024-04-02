@@ -35,9 +35,9 @@ void key_correction(LPVOID key)
 int main()
 {
     const char plain_text[] = "plaint text ;)";
-    //QWORD key = 0xBEEFBABECAFEBABE;
-    QWORD key = 0XFFFFFFFFFFFFFFFF;
- //   key_correction(&key);
+    QWORD key = 0xBEEFBABECAFEBABE;
+
+    key_correction(&key);
     QWORD pc1_key = 0; 
     pc1_key = pc1(&key);
         

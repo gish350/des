@@ -77,7 +77,15 @@ QWORD pc1(QWORD* key)
 	return pc1_key;
 }
 
-void cyclic_shift(LPVOID h, LPVOID l, int iteration)
+void cyclic_shift(LPVOID pc1, int iteration)
 {
+	// Преобразуем 32-битный l-буфер; отбрасываем последние 4 бита
+	DWORD _h = *(DWORD*)pc1;
+	_h = _h & 0xFFFFFFF0;
+
+	// Преобразуем 64-битный r-буфер; отбрасываем первые 28 бит,
+	// отбрасываем последние (64-56) 8 бит
+	QWORD _l = *(QWORD*)pc1;
+	_l = _l & 0x0000000FFFFFFF00;
 
 }
