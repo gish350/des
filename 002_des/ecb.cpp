@@ -56,24 +56,24 @@ QWORD pc1(QWORD* key)
 	pc1_key = pc1_key | ((*key & 0x200) << 54 - 37);				// 54
 	pc1_key = pc1_key | ((*key & 0x20000) << 46 - 38);				// 46
 	pc1_key = pc1_key | ((*key & 0x2000000) >> 1);					// 38
-	pc1_key = pc1_key | ((*key & 0x200000000));				// 30
-	pc1_key = pc1_key | ((*key & 0x20000000000));			// 22
+	pc1_key = pc1_key | ((*key & 0x200000000) >> 10);				// 30
+	pc1_key = pc1_key | ((*key & 0x20000000000) >> 19);				// 22
 
-	pc1_key = pc1_key | (*key & 0x2000000000000);			// 14
-	pc1_key = pc1_key | (*key & 0x2000000000000);		// 6
-	pc1_key = pc1_key | (*key & 0x4);					// 61
-	pc1_key = pc1_key | (*key & 0x400);					// 53
-	pc1_key = pc1_key | (*key & 0x40000);				// 45
-	pc1_key = pc1_key | (*key & 0x4000000);				// 37
-	pc1_key = pc1_key | (*key & 0x400000000);			// 29
+	pc1_key = pc1_key | ((*key & 0x2000000000000) >> 28);			// 14
+	pc1_key = pc1_key | ((*key & 0x200000000000000) >> 37);			// 6
+	pc1_key = pc1_key | ((*key & 0x4) << 61 - 44);					// 61
+	pc1_key = pc1_key | ((*key & 0x400) << 53 - 45);				// 53
+	pc1_key = pc1_key | ((*key & 0x40000) >> 1);					// 45
+	pc1_key = pc1_key | ((*key & 0x4000000) >> 10);					// 37
+	pc1_key = pc1_key | ((*key & 0x400000000) >> 19);				// 29
 
-	pc1_key = pc1_key | (*key & 0x40000000000);			// 21
-	pc1_key = pc1_key | (*key & 0x4000000000000);		// 13
-	pc1_key = pc1_key | (*key & 0x400000000000000);		// 5
-	pc1_key = pc1_key | (*key & 0x800000000);			// 28
-	pc1_key = pc1_key | (*key & 0x80000000000);			// 20
-	pc1_key = pc1_key | (*key & 0x8000000000000);		// 12
-	pc1_key = pc1_key | (*key & 0x800000000000000);		// 4	
+	pc1_key = pc1_key | ((*key & 0x40000000000) >> 28);				// 21
+	pc1_key = pc1_key | ((*key & 0x4000000000000) >> 37);			// 13
+	pc1_key = pc1_key | ((*key & 0x400000000000000) >> 46);			// 5
+	pc1_key = pc1_key | ((*key & 0x800000000) >> 24);				// 28
+	pc1_key = pc1_key | ((*key & 0x80000000000) >> 33);				// 20
+	pc1_key = pc1_key | ((*key & 0x8000000000000) >> 42);			// 12
+	pc1_key = pc1_key | ((*key & 0x800000000000000) >> 51);			// 4	
 	return pc1_key;
 }
 
