@@ -40,6 +40,7 @@ int main()
     key_correction(&key);
     QWORD pc1_key = 0; 
     pc1_key = pc1(&key);
+    make_k1(pc1_key);
         
     return 0;
 }
