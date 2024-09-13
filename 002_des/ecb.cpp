@@ -77,20 +77,19 @@ QWORD pc1(QWORD* hKey)
 	return pc1_key;
 }
 
-void split_pc1(LPVOID hPc1, DWORD* hH, DWORD* hL)
+void split_pc1(QWORD* hPc1, DWORD* hH, DWORD* hL)
 {
-	// Преобразуем 32-битный l-буфер; отбрасываем последние 4 бита
-	DWORD _h = *(DWORD*)hPc1;
-	_h = _h & 0xFFFFFFF0;
+	// Преобразуем 64-битный h-буфер; отбрасываем первые 28 бит,
+	// отбрасываем последние (64-56) 8 бит
+	QWORD _h = *(QWORD*)hPc1;
+	_h = _h & 0x0000000FFFFFFF00;
+	_h = _h >> 28;
 	hH = (DWORD*)_h;
 
-	// Преобразуем 64-битный r-буфер; отбрасываем первые 28 бит,
-	// отбрасываем последние (64-56) 8 бит
-	QWORD _l = *(QWORD*)hPc1;
-	_l = _l & 0x0000000FFFFFFF00;
-	_l = _l >> 28;
+	// Преобразуем 32-битный l-буфер; отбрасываем последние 4 бита
+	DWORD _l = *(DWORD*)hPc1;
+	_l = _l & 0xFFFFFFF0;
 	hL = (DWORD*)_l;
-	
 }
 void make_shift(DWORD* hH, DWORD* hL, int i)
 {
@@ -111,10 +110,10 @@ void make_pc2(DWORD h, DWORD l, BYTE* outBuf)
 
 }
 
-void make_k1(DWORD pc1)
+void make_k1(QWORD pc1)
 {
 	DWORD h = 0, l = 0; // 28 битные буферы, последние 32-28=4 бита не используем
-	split_pc1((LPVOID)pc1, (DWORD*)h, (DWORD*)l);
+	split_pc1(&pc1, (DWORD*)h, (DWORD*)l);
 
 
 	// 48 * 16 / 8 = 96 байт - суммарный размер блоков k1
