@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <winDNS.h>
 
-
+BYTE* k1_buffer;
 QWORD get_bit(QWORD bit, int sh)
 {
 	int rsh = 64 - sh - 1;
@@ -103,10 +103,18 @@ void make_shift(DWORD* hH, DWORD* hL, int i)
 	}
 }
 
-void make_pc2(DWORD h, DWORD l, BYTE* outBuf)
+void make_pc2(DWORD h, DWORD l)
 {
-	QWORD hlUnion = 0; 
 	// объединяем h и l
+	QWORD hlUnion = 0;
+	hlUnion = h;
+	hlUnion = hlUnion << 32;
+	QWORD l_tmp = 0;
+	l_tmp = l;
+	l_tmp = l_tmp << 4;
+	hlUnion = hlUnion | l_tmp;
+	
+
 
 }
 
@@ -117,13 +125,13 @@ void make_k1(QWORD pc1)
 
 
 	// 48 * 16 / 8 = 96 байт - суммарный размер блоков k1
-	BYTE* k1_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 96);
+	k1_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 96);
 
 	int i = 0;
 	while (i < 16)
 	{
 		make_shift(&h, &l, i);
-		make_pc2(h, l, k1_buffer);
+		make_pc2(h, l);
 		i++;
 	}
 
