@@ -118,12 +118,22 @@ void make_pc2(DWORD h, DWORD l, int i)
 	l_tmp = l_tmp << 4;
 	hlUnion = hlUnion | l_tmp;
 	
-	*(k1_buffer + i) = hlUnion & 0x2000000000000;							// 14
-	*(k1_buffer + i) = *(k1_buffer + i) | hlUnion & 0x400000000000;			// 17
-	*(k1_buffer + i) = *(k1_buffer + i) | hlUnion & 0x10000000000000;		// 11
-	*(k1_buffer + i) = *(k1_buffer + i) | hlUnion & 0x8000000000;			// 24	
-	*(k1_buffer + i) = *(k1_buffer + i) | hlUnion & 0x4000000000000000;		// 1
-	*(k1_buffer + i) = *(k1_buffer + i) | hlUnion & 0x400000000000000;		// 5
+	*(k1_buffer + i) = (hlUnion & 0x4000000000000) >> 50;							// 14 (13)
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x800000000000) >> 47 - 1 ;			// 17
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x20000000000000) >> 53 - 2;		// 11
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x10000000000) >> 40 - 3;			// 24	
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x8000000000000000) >> 63 - 4;		// 1
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x800000000000000) >> 59 - 5;		// 5
+
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x2000000000000000) >> 61;			//3
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x1000000000) >> 36;			//28
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x2000000000000) >> 49;			//15
+	*(k1_buffer + i) = *(k1_buffer + i) | (hlUnion & 0x400000000000000) >> 58;			//6
+																					
+
+
+
+	
 
 
 
