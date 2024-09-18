@@ -11,26 +11,38 @@ namespace bit_helper
         static void Main(string[] args)
         {
 
-           while (true)
+            while (true)
             {
-                Console.WriteLine("Введите порядковый номер бита (от 0 до 63): ");
-                int bitIndex = int.Parse(Console.ReadLine());
-
-                // Проверка на корректность ввода
-                if (bitIndex < 0 || bitIndex > 63)
                 {
-                    Console.WriteLine("Ошибка: введите число от 0 до 63.");
-                    return;
+                    Console.WriteLine();
+                    Console.WriteLine("==================================================");
+                    
+                    Console.Write("Введите номер бита (от 0 до 63, где 0 - старший бит): ");
+                    int bitPosition;
+
+                    // Проверка корректности ввода
+                    if (!int.TryParse(Console.ReadLine(), out bitPosition) || bitPosition < 0 || bitPosition > 63)
+                    {
+                        Console.WriteLine("Ошибка: введите число от 0 до 63.");
+                        return;
+                    }
+
+                    // Установка бита в единицу
+                    ulong number = 0;
+                    number |= (1UL << (63 - bitPosition)); // Установка указанного бита в единицу
+
+                    // Вычисление количества бит, на которое нужно сместить вправо, чтобы получить 1
+                    int shiftCount = 63 - bitPosition;
+
+                    // Вывод результата в шестнадцатеричном формате
+                    Console.WriteLine($"Результат: {number:X}");
+                    Console.WriteLine($"Количество бит для сдвига вправо, чтобы получить 1: {shiftCount}");
+                    Console.WriteLine("==================================================");
+                    Console.WriteLine();
+                    
                 }
-
-                // Создаем число, где только один бит установлен на 1 в указанной позиции
-                ulong bitMask = 1UL << bitIndex;
-
-                // Выводим число в шестнадцатеричном формате
-                Console.WriteLine($"Число, соответствующее биту {bitIndex}, в шестнадцатеричном формате: {bitMask:X}");
             }
-           
-            
         }
+
     }
 }
