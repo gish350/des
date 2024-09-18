@@ -18,12 +18,12 @@
     <ClCompile Include="002_des.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ecb.cpp">
+    <ClCompile Include="keys.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ecb.h">
+    <ClInclude Include="keys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

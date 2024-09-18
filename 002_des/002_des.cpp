@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <winDNS.h>
 #include <iostream>
-#include "ecb.h"
+#include "keys.h"
 
 // Коррекция ключа: требуется, чтобы сумма битов каждого байта ключа, 
 // включая контрольный, была нечетной (нечетный паритетный бит).
