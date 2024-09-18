@@ -104,7 +104,7 @@ void make_shift(DWORD* hH, DWORD* hL, int i)
 	}
 }
 BYTE* k1_buffer;
-void make_pc2(DWORD h, DWORD l, int i)
+void make_pc2(DWORD h, DWORD l, int k)
 {
 	// מבתוהטםÿול h ט l
 	QWORD hlUnion = 0;
@@ -172,7 +172,7 @@ void make_pc2(DWORD h, DWORD l, int i)
 	tmpBuffer = tmpBuffer | (hlUnion & 0x800000000) << 46 - 35;						  // 29
 	tmpBuffer = tmpBuffer | (hlUnion & 0x100000000) << 47 - 32;                       // 32
 
-	memmove(k1_buffer, (BYTE*)tmpBuffer, 6);
+	memmove(k1_buffer + k, (BYTE*)&tmpBuffer, 6);
 
 
 
