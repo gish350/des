@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdio.h> // убрать
+#include "permutation.h"
 int cipher(int l, int r);
 int uncipher(int r, int l);
 

@@ -33,8 +33,8 @@ QWORD pc1(QWORD* hKey)
 
 	pc1_key = pc1_key | ((*hKey & 0x40000000000000) >> 54 - 14);	// 10
 	pc1_key = pc1_key | ((*hKey & 0x4000000000000000) >> 62 - 15);	// 2
-	pc1_key = pc1_key | ((*hKey & 0x20) << 9);						// 59
-	pc1_key = pc1_key | ((*hKey & 0x2000) << 4);					// 51
+	pc1_key = pc1_key | ((*hKey & 0x20) << 16 - 5);						// 59
+	pc1_key = pc1_key | ((*hKey & 0x2000) << 17 - 13);					// 51
 	pc1_key = pc1_key | ((*hKey & 0x200000) >> 21 - 18);			// 43
 	pc1_key = pc1_key | ((*hKey & 0x20000000) >> 29 - 19);			// 35
 	pc1_key = pc1_key | ((*hKey & 0x2000000000) >> 37 - 20);		// 27
@@ -45,39 +45,39 @@ QWORD pc1(QWORD* hKey)
 	pc1_key = pc1_key | ((*hKey & 0x10) << 20);						// 60
 	pc1_key = pc1_key | ((*hKey & 0x1000) << 13);					// 52
 	pc1_key = pc1_key | ((*hKey & 0x100000) << 6);					// 44
-	pc1_key = pc1_key | ((*hKey & 0x10000000) << 1);				// 36
+	pc1_key = pc1_key | ((*hKey & 0x10000000) >> 28 - 27);				// 36
 
-	pc1_key = pc1_key | ((*hKey & 0x2) >> 1 );						// 63
-	pc1_key = pc1_key | ((*hKey & 0x200) >> 9);						// 55
-	pc1_key = pc1_key | ((*hKey & 0x20000) >> 17);					// 47
-	pc1_key = pc1_key | ((*hKey & 0x2000000) >> 25);				// 39
-	pc1_key = pc1_key | ((*hKey & 0x200000000) >> 33);				// 31
-	pc1_key = pc1_key | ((*hKey & 0x20000000000) >> 41);			// 23
-	pc1_key = pc1_key | ((*hKey & 0x2000000000000) >> 49);			// 15
+	pc1_key = pc1_key | ((*hKey & 0x2) << 28 - 1 );						// 63
+	pc1_key = pc1_key | ((*hKey & 0x200) <<29 -9);						// 55
+	pc1_key = pc1_key | ((*hKey & 0x20000) << 30 -17);					// 47
+	pc1_key = pc1_key | ((*hKey & 0x2000000) << 31 - 25);				// 39
+	pc1_key = pc1_key | ((*hKey & 0x200000000) >> 33 - 32);				// 31
+	pc1_key = pc1_key | ((*hKey & 0x20000000000) >> 41 - 33);			// 23
+	pc1_key = pc1_key | ((*hKey & 0x2000000000000) >> 49 - 34);			// 15
 
-	pc1_key = pc1_key | ((*hKey & 0x100000000000000) >> 28);		// 7
-	pc1_key = pc1_key | ((*hKey & 0x2) << 62 - 36);					// 62
-	pc1_key = pc1_key | ((*hKey & 0x200) << 54 - 37);				// 54
-	pc1_key = pc1_key | ((*hKey & 0x20000) << 46 - 38);				// 46
-	pc1_key = pc1_key | ((*hKey & 0x2000000) >> 1);					// 38
-	pc1_key = pc1_key | ((*hKey & 0x200000000) >> 10);				// 30
-	pc1_key = pc1_key | ((*hKey & 0x20000000000) >> 19);			// 22
+	pc1_key = pc1_key | ((*hKey & 0x200000000000000) >> 57 - 35);		// 7
+	pc1_key = pc1_key | ((*hKey & 0x4) << 36 - 2);						// 62
+	pc1_key = pc1_key | ((*hKey & 0x400) << 37 - 10);					// 54
+	pc1_key = pc1_key | ((*hKey & 0x40000) << 38 - 18);					// 46
+	pc1_key = pc1_key | ((*hKey & 0x4000000) << 39 - 26);				// 38
+	pc1_key = pc1_key | ((*hKey & 0x400000000) << 40 -  34);			// 30
+	pc1_key = pc1_key | ((*hKey & 0x40000000000) >> 42 - 41);			// 22
 
-	pc1_key = pc1_key | ((*hKey & 0x2000000000000) >> 28);			// 14
-	pc1_key = pc1_key | ((*hKey & 0x200000000000000) >> 37);		// 6
-	pc1_key = pc1_key | ((*hKey & 0x4) << 61 - 44);					// 61
-	pc1_key = pc1_key | ((*hKey & 0x400) << 53 - 45);				// 53
-	pc1_key = pc1_key | ((*hKey & 0x40000) >> 1);					// 45
-	pc1_key = pc1_key | ((*hKey & 0x4000000) >> 10);				// 37
-	pc1_key = pc1_key | ((*hKey & 0x400000000) >> 19);				// 29
+	pc1_key = pc1_key | ((*hKey & 0x4000000000000) >> 50 - 42);			// 14
+	pc1_key = pc1_key | ((*hKey & 0x400000000000000) >> 58 - 43);		// 6
+	pc1_key = pc1_key | ((*hKey & 0x8) << 44 - 3);					// 61
+	pc1_key = pc1_key | ((*hKey & 0x800) << 45 - 11);				// 53
+	pc1_key = pc1_key | ((*hKey & 0x80000) << 46 - 19);					// 45
+	pc1_key = pc1_key | ((*hKey & 0x8000000) << 47 - 27);				// 37
+	pc1_key = pc1_key | ((*hKey & 0x800000000) << 48 - 35);				// 29
 
-	pc1_key = pc1_key | ((*hKey & 0x40000000000) >> 28);			// 21
-	pc1_key = pc1_key | ((*hKey & 0x4000000000000) >> 37);			// 13
-	pc1_key = pc1_key | ((*hKey & 0x400000000000000) >> 46);		// 5
-	pc1_key = pc1_key | ((*hKey & 0x800000000) >> 24);				// 28
-	pc1_key = pc1_key | ((*hKey & 0x80000000000) >> 33);			// 20
-	pc1_key = pc1_key | ((*hKey & 0x8000000000000) >> 42);			// 12
-	pc1_key = pc1_key | ((*hKey & 0x800000000000000) >> 51);		// 4	
+	pc1_key = pc1_key | ((*hKey & 0x80000000000) << 49 - 43);			// 21
+	pc1_key = pc1_key | ((*hKey & 0x8000000000000) >> 51 - 50);			// 13
+	pc1_key = pc1_key | ((*hKey & 0x800000000000000) >> 59 - 51);		// 5
+	pc1_key = pc1_key | ((*hKey & 0x1000000000) << 52 - 36);				// 28
+	pc1_key = pc1_key | ((*hKey & 0x100000000000) << 53- 44);			// 20
+	pc1_key = pc1_key | ((*hKey & 0x10000000000000) << 54 - 52);			// 12
+	pc1_key = pc1_key | ((*hKey & 0x1000000000000000) >> 60 - 55);		// 4	
 	return pc1_key;
 }
 
