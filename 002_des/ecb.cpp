@@ -11,9 +11,6 @@ QWORD get_bit(QWORD bit, int sh)
 //todo: сдвиг на 1 меньше чем в таблице
 QWORD pc1(QWORD* hKey)
 {
-	QWORD tmp_test = 0xFFFFFFFFFFFFFFFF;
-	hKey = &tmp_test;
-
 	QWORD pc1_key = 0;
 	pc1_key = pc1_key | ((*hKey & 0x80) >> 7);						// 57-й бит (56)
 	pc1_key = pc1_key | ((*hKey & 0x8000) >> 15 - 1);				// 49 (48)
@@ -118,7 +115,6 @@ void make_pc2(DWORD h, DWORD l, int i)
 	l_tmp = l_tmp << 4;
 	hlUnion = hlUnion | l_tmp;
 
-	hlUnion = 0xFFFFFFFFFFFFFFFF; // test
 	QWORD tmpBuffer = 0;
 	tmpBuffer = tmpBuffer | (hlUnion & 0x4000000000000) >> 50;						 // 14
 	tmpBuffer = tmpBuffer | (hlUnion & 0x800000000000) >> 47 - 1;					 // 17
@@ -196,11 +192,13 @@ void make_k1(QWORD pc1)
 	k1_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 96);
 
 	int i = 0;
+	int k = 0;
 	while (i < 16)
 	{
 		make_shift(&h, &l, i);
-		make_pc2(h, l, i);
-		i += 6; // 6 байт (48 бит) размер одного k1 элемента
+		make_pc2(h, l, k);
+		k += 6; // 6 байт (48 бит) размер одного k1 элемента
+		i++;
 	}
 
 
