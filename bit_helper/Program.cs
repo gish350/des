@@ -65,9 +65,35 @@ namespace bit_helper
                 i++;
             }
             Console.ReadKey();
+        }
+
+        static void gen_e()
+        {
+            List<int> nums = new List<int>() { 32,   1,   2,   3,   4,   5,
+                                               4,    5,   6 ,  7,   8,   9,
+                                                8,   9,   10,  11,  12,  13,
+                                                12,  13,  14,  15,  16,  17,
+                                                16,  17,  18,  19,  20,  21,
+                                                20,  21,  22,  23,  24,  25,
+                                                24,  25,  26,  27,  28,  29,
+                                                28,  29,  30,  31,  32,  1};
+            int i = 0;
+            foreach (int bitPosition in nums)
+            {
+                ulong number = 0;
+                number |= (1UL << (63 - (bitPosition - 1))); // Установка указанного бита в единицу
+
+                // Вычисление количества бит, на которое нужно сместить вправо, чтобы получить 1
+                int shiftCount = 63 - (bitPosition - 1);
+
+                // Вывод результата в шестнадцатеричном формате
 
 
-
+               
+                Console.WriteLine($"e = e | ((tmp_l & 0x{number:X}) >> {shiftCount} - {i});\t\t\t\t//{bitPosition}");
+                i++;
+            }
+            Console.ReadKey();
         }
 
         static void Main(string[] args)
@@ -77,6 +103,8 @@ namespace bit_helper
                 gen_pc2();
             else if (n == 2)
                 gen_ip();
+            else if (n == 3)
+                gen_e();
             else
             {
                 while (true)
