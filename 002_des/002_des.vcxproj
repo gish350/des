@@ -140,9 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="002_des.cpp" />
+    <ClCompile Include="cipher.cpp" />
     <ClCompile Include="keys.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="cipher.h" />
     <ClInclude Include="keys.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

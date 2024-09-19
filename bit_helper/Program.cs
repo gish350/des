@@ -39,11 +39,44 @@ namespace bit_helper
 
         }
 
+        static void gen_ip()
+        {
+            List<int> nums = new List<int>() { 58,   50,  42,  34,  26,  18,  10,  2,
+                                                60,  52,  44,  36,  28,  20,  12,  4,
+                                                62,  54,  46,  38,  30,  22,  14,  6,
+                                                64,  56,  48,  40,  32,  24,  16,  8,
+                                                57,  49,  41,  33,  25,  17,  9,  1,
+                                                59, 51,  43,  35,  27,  19,  11,  3,
+                                                61,  53,  45,  37,  29, 21,  13,  5,
+                                                63,  55,  47,  39,  31,  23,  15,  7};
+            int i = 0;
+            foreach (int bitPosition in nums)
+            {
+                ulong number = 0;
+                number |= (1UL << (63 - (bitPosition - 1))); // Установка указанного бита в единицу
+
+                // Вычисление количества бит, на которое нужно сместить вправо, чтобы получить 1
+                int shiftCount = 63 - (bitPosition - 1);
+
+                // Вывод результата в шестнадцатеричном формате
+
+               
+                Console.WriteLine($"ip = ip | ((*block_64 & 0x{number:X}) >> {shiftCount} - {i}); \t\t\t // {bitPosition}");
+                i++;
+            }
+            Console.ReadKey();
+
+
+
+        }
+
         static void Main(string[] args)
         {
             int n = Convert.ToInt32(Console.ReadLine());
             if (n == 1)
                 gen_pc2();
+            else if (n == 2)
+                gen_ip();
             else
             {
                 while (true)

@@ -21,9 +21,15 @@
     <ClCompile Include="keys.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cipher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cipher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
