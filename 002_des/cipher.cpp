@@ -156,6 +156,22 @@ void make_f(DWORD l, QWORD k)
 {
 	make_e(l);
 }
+
+void make_h_dash(QWORD h)
+{
+	// 48-битовый блок данных H раздел€етс€ на восемь 6-битовых фрагментов, обозначенных h1, h2, Е, h8.
+	BYTE h1 = 0, h2 = 0, h3 = 0, h4 = 0, h5 = 0, h6 = 0, h7 = 0, h8 = 0;
+	h1 = h | 0xFC00000000000000;
+	h2 = h | (0xFC00000000000000 >> 6);
+	h3 = h | (0xFC00000000000000 >> 12);
+	h4 = h | (0xFC00000000000000 >> 18);
+	h5 = h | (0xFC00000000000000 >> 24);
+	h6 = h | (0xFC00000000000000 >> 30);
+	h7 = h | (0xFC00000000000000 >> 36);
+	h8 = h | (0xFC00000000000000 >> 32);
+	
+}
+
 void ecb_cipher(BYTE* plain_text)
 {
 	QWORD ip_test = 0xFFFFFFFFFFFFFFFF;
@@ -164,5 +180,6 @@ void ecb_cipher(BYTE* plain_text)
 	split_ip(split_ip_test);
 	DWORD make_e_test = 0xFFFFFFFF;
 	make_e(make_e_test);
+	//QWORD H = x ^ k;
 	
 }
