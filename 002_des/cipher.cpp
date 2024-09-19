@@ -80,9 +80,23 @@ QWORD make_ip(QWORD* block_64)
 	return ip;
 }
 
+void split_ip(QWORD ip)
+{
+	// Преобразуем 32-битный h-буфер; отбрасываем последние 32 бита
+	DWORD h = ip >> 32;
+	
+
+	// Преобразуем 32-битный l-буфер; отбрасываем первые 32 бита
+	
+	DWORD l = (ip << 32) >> 32;
+	
+}
+
 void ecb_cipher(BYTE* plain_text)
 {
 	QWORD ip_test = 0xFFFFFFFFFFFFFFFF;
 	make_ip(&ip_test);
+	QWORD split_ip_test = 0xAAAAAAAABBBBBBBB;
+	split_ip(split_ip_test);
 	
 }
