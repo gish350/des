@@ -882,17 +882,19 @@ void make_h_dash(QWORD h)
 	t7 = 0xf0;
 	t8 = 0xf0;
 	DWORD test = 0;
-	test =  (DWORD)t1 >> 8;
+	test =  t1;
+	test = (test << 24);
+	test = test >> 8;
 	//  ѕолученные восемь фрагментов tj вновь объедин€ютс€ в 32-битовый блок HТ.
 	DWORD h_dash = 0;
-	h_dash = h_dash | ((DWORD)t1);
-	h_dash = h_dash | (((DWORD)t2) >> 4);
-	h_dash = h_dash | (((DWORD)t3) >> 8);	// смещение не работает из за типа BYTE?
-	h_dash = h_dash | (((DWORD)t4) >> 12);
-	h_dash = h_dash | (((DWORD)t5) >> 16);
-	h_dash = h_dash | (((DWORD)t6) >> 20);
-	h_dash = h_dash | (((DWORD)t7) >> 24);
-	h_dash = h_dash | (((DWORD)t8) >> 28);
+	h_dash = h_dash | ((DWORD)t1 << 24);
+	h_dash = h_dash | (((DWORD)t2 << 24) >> 4);
+	h_dash = h_dash | (((DWORD)t3 << 24) >> 8);	// смещение не работает из за типа BYTE?
+	h_dash = h_dash | (((DWORD)t4 << 24) >> 12);
+	h_dash = h_dash | (((DWORD)t5 << 24) >> 16);
+	h_dash = h_dash | (((DWORD)t6 << 24) >> 20);
+	h_dash = h_dash | (((DWORD)t7 << 24) >> 24);
+	h_dash = h_dash | (((DWORD)t8 << 24) >> 28);
 }
 
 
