@@ -805,7 +805,45 @@ BYTE make_t8(BYTE row, BYTE column)
 	}
 }
 
+void make_p(DWORD h_dash)
+{
+	DWORD p = 0;
+	p = p | ((h_dash & 0x10000) >> (16 - 0));                       // 16
+	p = p | ((h_dash & 0x2000000) >> (25 - 1));                     // 7
+	p = p | ((h_dash & 0x1000) >> (12 - 2));                        // 20
+	p = p | ((h_dash & 0x800) >> (11 - 3));							// 21
+	p = p | ((h_dash & 0x8) << (4 - 3));						    // 29
+	p = p | ((h_dash & 0x100000) >> (20 - 5));                      // 12
+	p = p | ((h_dash & 0x10) << (6-4));						   // 28
+	p = p | ((h_dash & 0x8000) >> (15 - 7));                        // 17
 
+	p = p | ((h_dash & 0x80000000) >> (31 - 8));                    // 1
+	p = p | ((h_dash & 0x20000) >> (17 - 9));                       // 15
+	p = p | ((h_dash & 0x200) << (10-9));						   // 23
+	p = p | ((h_dash & 0x40) << (11-6));						   // 26
+	p = p | ((h_dash & 0x8000000) >> (27 - 12));                    // 5
+	p = p | ((h_dash & 0x4000) >> (14 - 13));                       // 18
+	p = p | ((h_dash & 0x2) << (14-1));						   // 31
+	p = p | ((h_dash & 0x400000) >> (22 - 15));                     // 10
+
+	p = p | ((h_dash & 0x40000000) >> (30 - 16));                   // 2
+	p = p | ((h_dash & 0x1000000) >> (24 - 17));                    // 8
+	p = p | ((h_dash & 0x100) << (18-8));							// 24
+	p = p | ((h_dash & 0x40000) << (19-18));                      // 14
+	p = p | ((h_dash & 0x1) << (20));							// 32
+	p = p | ((h_dash & 0x20) << (21-5));						  // 27
+	p = p | ((h_dash & 0x20000000) >> (29 - 22));                   // 3
+	p = p | ((h_dash & 0x800000) >> (23 - 23));                     // 9
+
+	p = p | ((h_dash & 0x2000) << (24 - 13));                       // 19
+	p = p | ((h_dash & 0x80000) << (25 - 19));                      // 13
+	p = p | ((h_dash & 0x4) << (26-2));							 // 30
+	p = p | ((h_dash & 0x4000000) << (27-26));                    // 6
+	p = p | ((h_dash & 0x400) << (28-10));                        // 22
+	p = p | ((h_dash & 0x200000) << (29-21));                     // 11
+	p = p | ((h_dash & 0x10000000) << (30-28));                   // 4
+	p = p | ((h_dash & 0x80) << (31-7));						  // 25
+}
 
 void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
 {
@@ -889,12 +927,16 @@ void make_h_dash(QWORD h)
 	DWORD h_dash = 0;
 	h_dash = h_dash | ((DWORD)t1 << 24);
 	h_dash = h_dash | (((DWORD)t2 << 24) >> 4);
-	h_dash = h_dash | (((DWORD)t3 << 24) >> 8);	// смещение не работает из за типа BYTE?
+	h_dash = h_dash | (((DWORD)t3 << 24) >> 8);	
 	h_dash = h_dash | (((DWORD)t4 << 24) >> 12);
 	h_dash = h_dash | (((DWORD)t5 << 24) >> 16);
 	h_dash = h_dash | (((DWORD)t6 << 24) >> 20);
 	h_dash = h_dash | (((DWORD)t7 << 24) >> 24);
 	h_dash = h_dash | (((DWORD)t8 << 24) >> 28);
+
+	// ƒл€ HТ выполн€етс€ перестановка битов P.
+	DWORD p_test = 0xFFFFFFFF;
+	make_p(p_test);
 }
 
 

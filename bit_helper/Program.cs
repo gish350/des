@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,9 +35,32 @@ namespace bit_helper
                 i++;
             }
             Console.ReadKey();
+        }
 
+        static void make_p()
+        {
+            List<int> nums = new List<int>() {
+                                                16,  7 ,  20,  21 , 29,  12  ,28,  17,
+                                                1,   15,  23,  26 , 5  , 18  ,31 , 10,
+                                                2,   8,   24,  14,  32  ,27 , 3   ,9,
+                                                19,  13,  30,  6,   22  ,11,  4  , 25,
 
+                                                };
+            int i = 0;
+            foreach (int bitPosition in nums)
+            {
+                uint number = 0;
+                number |= (1U << (31 - (bitPosition - 1))); // Установка указанного бита в единицу
 
+                // Вычисление количества бит, на которое нужно сместить вправо, чтобы получить 1
+                int shiftCount = 31 - (bitPosition - 1);
+
+                // Вывод результата в шестнадцатеричном формате
+                Console.WriteLine($"p = p | ((h_dash & 0x{number:X}) >> ({shiftCount} - {i}));			// {bitPosition}");
+                i++;
+            }
+            Console.ReadKey();
+            
         }
 
         static void gen_ip()
@@ -105,6 +129,8 @@ namespace bit_helper
                 gen_ip();
             else if (n == 3)
                 gen_e();
+            else if (n ==4)
+                make_p();
             else
             {
                 while (true)
