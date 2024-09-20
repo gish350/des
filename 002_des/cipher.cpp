@@ -849,30 +849,50 @@ void make_h_dash(QWORD h)
 	BYTE t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
 
 	get_row_col(h1, &row, &col);
-	t1 = make_t1(row, col);
+	t1 = make_t1(row, col) << 4;
 
 	get_row_col(h2, &row, &col);
-	t2 = make_t2(row, col);
+	t2 = make_t2(row, col) << 4;
 
 	get_row_col(h3, &row, &col);
-	t3 = make_t3(row, col);
+	t3 = make_t3(row, col) << 4;
 
 	get_row_col(h4, &row, &col);
-	t4 = make_t4(row, col);
+	t4 = make_t4(row, col) << 4;
 
 	get_row_col(h5, &row, &col);
-	t5 = make_t5(row, col);
+	t5 = make_t5(row, col) << 4;
 
 	get_row_col(h6, &row, &col);
-	t6 = make_t6(row, col);
+	t6 = make_t6(row, col) << 4;
 
 	get_row_col(h7, &row, &col);
-	t7 = make_t7(row, col);
+	t7 = make_t7(row, col) << 4;
 
 	get_row_col(h8, &row, &col);
-	t8 = make_t8(row, col);
+	t8 = make_t8(row, col) << 4;
 	
+	t1 = 0xf0;
+	t2 = 0xf0;
+	t3 = 0xf0;
+	t4 = 0xf0;
+
+	t5 = 0xf0;
+	t6 = 0xf0;
+	t7 = 0xf0;
+	t8 = 0xf0;
+	DWORD test = 0;
+	test =  (DWORD)t1 >> 8;
 	//  ѕолученные восемь фрагментов tj вновь объедин€ютс€ в 32-битовый блок HТ.
+	DWORD h_dash = 0;
+	h_dash = h_dash | ((DWORD)t1);
+	h_dash = h_dash | (((DWORD)t2) >> 4);
+	h_dash = h_dash | (((DWORD)t3) >> 8);	// смещение не работает из за типа BYTE?
+	h_dash = h_dash | (((DWORD)t4) >> 12);
+	h_dash = h_dash | (((DWORD)t5) >> 16);
+	h_dash = h_dash | (((DWORD)t6) >> 20);
+	h_dash = h_dash | (((DWORD)t7) >> 24);
+	h_dash = h_dash | (((DWORD)t8) >> 28);
 }
 
 
