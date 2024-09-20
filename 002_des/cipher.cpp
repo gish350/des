@@ -724,7 +724,7 @@ BYTE make_t7(BYTE row, BYTE column)
 	}
 }
 
-BYTE make_t7(BYTE row, BYTE column)
+BYTE make_t8(BYTE row, BYTE column)
 {
 	if (row == 0)
 	{
@@ -807,7 +807,17 @@ BYTE make_t7(BYTE row, BYTE column)
 
 
 
+void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
+{
+	*out_row = 0;
+	*out_col = 0;
+	BYTE tmpRow = 0;
+	tmpRow = (h & 0x20) >> 4;			// 0010 0000
+	*out_row = (h & 0x2) >> 1;			// 0000 0010
 
+	*out_row = *out_row | tmpRow;
+	*out_col = (h & 0x1E) >> 1;			// 011110
+}
 
 void make_h_dash(QWORD h)
 {
@@ -822,7 +832,6 @@ void make_h_dash(QWORD h)
 	h7 = h | 0xFC00000;
 	h8 = h | 0x3F0000;*/
 
-	// проблема со скобками
 	BYTE h1 = 0, h2 = 0, h3 = 0, h4 = 0, h5 = 0, h6 = 0, h7 = 0, h8 = 0;
 	h1 = (h & 0xFC00000000000000) >> 64 - 8;
 	h2 = (h & (0xFC00000000000000 >> 6)) >> 64 - 8 * 2 + 2;
@@ -834,13 +843,36 @@ void make_h_dash(QWORD h)
 	h8 = (h & (0xFC00000000000000 >> 42)) >> 64 - 8 * 8 + 14;
 
 	// Каждое из значений hj преобразуется в новое 4-битовое значение tj с помощью соответствующего узла замены Sj.
-	BYTE row = 0, column = 0;
-	BYTE tmpRow = 0;
-	tmpRow = (h1 & 0x20) >> 4;			// 0010 0000
-	row = (h1 & 0x2) >> 1;				// 0000 0010
-	row = row | tmpRow;
+	BYTE row = 0;
+	BYTE col = 0;
 
-	column = (h1 & 0x1E) >> 1;			// 011110
+	BYTE t1 = 0, t2 = 0, t3 = 0, t4 = 0, t5 = 0, t6 = 0, t7 = 0, t8 = 0;
+
+	get_row_col(h1, &row, &col);
+	t1 = make_t1(row, col);
+
+	get_row_col(h2, &row, &col);
+	t2 = make_t2(row, col);
+
+	get_row_col(h3, &row, &col);
+	t3 = make_t3(row, col);
+
+	get_row_col(h4, &row, &col);
+	t4 = make_t4(row, col);
+
+	get_row_col(h5, &row, &col);
+	t5 = make_t5(row, col);
+
+	get_row_col(h6, &row, &col);
+	t6 = make_t6(row, col);
+
+	get_row_col(h7, &row, &col);
+	t7 = make_t7(row, col);
+
+	get_row_col(h8, &row, &col);
+	t8 = make_t8(row, col);
+	
+	//  Полученные восемь фрагментов tj вновь объединяются в 32-битовый блок H’.
 }
 
 
