@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <winDNS.h>
+#include "keys.h"
 
 QWORD make_ip(QWORD* block_64)
 {
@@ -728,7 +729,7 @@ BYTE make_t8(BYTE row, BYTE column)
 {
 	if (row == 0)
 	{
-		if (column == 0) return 13;																
+		if (column == 0) return 13;
 		if (column == 1) return 2;
 		if (column == 2) return 8;
 		if (column == 3) return 4;
@@ -747,7 +748,7 @@ BYTE make_t8(BYTE row, BYTE column)
 	}
 	if (row == 1)
 	{
-		if (column == 0) return 1;																	
+		if (column == 0) return 1;
 		if (column == 1) return 15;
 		if (column == 2) return 13;
 		if (column == 3) return 8;
@@ -767,7 +768,7 @@ BYTE make_t8(BYTE row, BYTE column)
 
 	if (row == 2)
 	{
-		if (column == 0) return 7;																		
+		if (column == 0) return 7;
 		if (column == 1) return 11;
 		if (column == 2) return 4;
 		if (column == 3) return 1;
@@ -786,7 +787,7 @@ BYTE make_t8(BYTE row, BYTE column)
 	}
 	if (row == 3)
 	{
-		if (column == 0) return 2;																		
+		if (column == 0) return 2;
 		if (column == 1) return 1;
 		if (column == 2) return 14;
 		if (column == 3) return 7;
@@ -814,35 +815,35 @@ void make_p(DWORD h_dash)
 	p = p | ((h_dash & 0x800) >> (11 - 3));							// 21
 	p = p | ((h_dash & 0x8) << (4 - 3));						    // 29
 	p = p | ((h_dash & 0x100000) >> (20 - 5));                      // 12
-	p = p | ((h_dash & 0x10) << (6-4));						   // 28
+	p = p | ((h_dash & 0x10) << (6 - 4));						   // 28
 	p = p | ((h_dash & 0x8000) >> (15 - 7));                        // 17
 
 	p = p | ((h_dash & 0x80000000) >> (31 - 8));                    // 1
 	p = p | ((h_dash & 0x20000) >> (17 - 9));                       // 15
-	p = p | ((h_dash & 0x200) << (10-9));						   // 23
-	p = p | ((h_dash & 0x40) << (11-6));						   // 26
+	p = p | ((h_dash & 0x200) << (10 - 9));						   // 23
+	p = p | ((h_dash & 0x40) << (11 - 6));						   // 26
 	p = p | ((h_dash & 0x8000000) >> (27 - 12));                    // 5
 	p = p | ((h_dash & 0x4000) >> (14 - 13));                       // 18
-	p = p | ((h_dash & 0x2) << (14-1));						   // 31
+	p = p | ((h_dash & 0x2) << (14 - 1));						   // 31
 	p = p | ((h_dash & 0x400000) >> (22 - 15));                     // 10
 
 	p = p | ((h_dash & 0x40000000) >> (30 - 16));                   // 2
 	p = p | ((h_dash & 0x1000000) >> (24 - 17));                    // 8
-	p = p | ((h_dash & 0x100) << (18-8));							// 24
-	p = p | ((h_dash & 0x40000) << (19-18));                      // 14
+	p = p | ((h_dash & 0x100) << (18 - 8));							// 24
+	p = p | ((h_dash & 0x40000) << (19 - 18));                      // 14
 	p = p | ((h_dash & 0x1) << (20));							// 32
-	p = p | ((h_dash & 0x20) << (21-5));						  // 27
+	p = p | ((h_dash & 0x20) << (21 - 5));						  // 27
 	p = p | ((h_dash & 0x20000000) >> (29 - 22));                   // 3
 	p = p | ((h_dash & 0x800000) >> (23 - 23));                     // 9
 
 	p = p | ((h_dash & 0x2000) << (24 - 13));                       // 19
 	p = p | ((h_dash & 0x80000) << (25 - 19));                      // 13
-	p = p | ((h_dash & 0x4) << (26-2));							 // 30
-	p = p | ((h_dash & 0x4000000) << (27-26));                    // 6
-	p = p | ((h_dash & 0x400) << (28-10));                        // 22
-	p = p | ((h_dash & 0x200000) << (29-21));                     // 11
-	p = p | ((h_dash & 0x10000000) << (30-28));                   // 4
-	p = p | ((h_dash & 0x80) << (31-7));						  // 25
+	p = p | ((h_dash & 0x4) << (26 - 2));							 // 30
+	p = p | ((h_dash & 0x4000000) << (27 - 26));                    // 6
+	p = p | ((h_dash & 0x400) << (28 - 10));                        // 22
+	p = p | ((h_dash & 0x200000) << (29 - 21));                     // 11
+	p = p | ((h_dash & 0x10000000) << (30 - 28));                   // 4
+	p = p | ((h_dash & 0x80) << (31 - 7));						  // 25
 }
 
 void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
@@ -909,7 +910,7 @@ void make_h_dash(QWORD h)
 
 	get_row_col(h8, &row, &col);
 	t8 = make_t8(row, col) << 4;
-	
+
 	t1 = 0xf0;
 	t2 = 0xf0;
 	t3 = 0xf0;
@@ -920,14 +921,14 @@ void make_h_dash(QWORD h)
 	t7 = 0xf0;
 	t8 = 0xf0;
 	DWORD test = 0;
-	test =  t1;
+	test = t1;
 	test = (test << 24);
 	test = test >> 8;
 	//  Полученные восемь фрагментов tj вновь объединяются в 32-битовый блок H’.
 	DWORD h_dash = 0;
 	h_dash = h_dash | ((DWORD)t1 << 24);
 	h_dash = h_dash | (((DWORD)t2 << 24) >> 4);
-	h_dash = h_dash | (((DWORD)t3 << 24) >> 8);	
+	h_dash = h_dash | (((DWORD)t3 << 24) >> 8);
 	h_dash = h_dash | (((DWORD)t4 << 24) >> 12);
 	h_dash = h_dash | (((DWORD)t5 << 24) >> 16);
 	h_dash = h_dash | (((DWORD)t6 << 24) >> 20);
@@ -941,15 +942,29 @@ void make_h_dash(QWORD h)
 
 
 
-void ecb_cipher(BYTE* plain_text)
+void ecb_cipher(BYTE* plain_text, QWORD key)
 {
+	// Выработка ключевых элементов
+	key_correction(&key); 
+	make_k1(QWORD pc1);
+
+	// Зашифрование
+
+	// Шифрование 64-битового блока открытого текста T начинается с начальной перестановки битов IP. 
+	// В таблице указывается новое положение соответствующего бита.
+	// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
 	QWORD ip_test = 0xFFFFFFFFFFFFFFFF;
 	make_ip(&ip_test);
+
+	// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
+	// с которыми выполняются 16 раундов преобразования(ячеек Фейстеля)
 	QWORD split_ip_test = 0xAAAAAAAABBBBBBBB;
 	split_ip(split_ip_test);
+	//QWORD H = x ^ k;
+
 	DWORD make_e_test = 0xFFFFFFFF;
 	make_e(make_e_test);
-	//QWORD H = x ^ k;
+	
 	QWORD h_dash_test = 0x3F0000;
 	make_h_dash(h_dash_test);
 
