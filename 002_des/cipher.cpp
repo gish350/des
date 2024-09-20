@@ -14,7 +14,7 @@ QWORD make_ip(QWORD* block_64)
 	ip = ip | ((*block_64 & 0x40000000000000) >> 54 - 6);           // 10
 	ip = ip | ((*block_64 & 0x4000000000000000) >> 62 - 7);          // 2
 
-	ip = ip | ((*block_64 & 0x10) << 8-4 );                         // 60
+	ip = ip | ((*block_64 & 0x10) << 8 - 4);                         // 60
 	ip = ip | ((*block_64 & 0x1000) >> 12 - 9);                      // 52
 	ip = ip | ((*block_64 & 0x100000) >> 20 - 10);                   // 44
 	ip = ip | ((*block_64 & 0x10000000) >> 28 - 11);                // 36
@@ -34,8 +34,8 @@ QWORD make_ip(QWORD* block_64)
 
 	ip = ip | ((*block_64 & 0x1) << 24);                         // 64
 	ip = ip | ((*block_64 & 0x100) << 25 - 8);                       // 56
-	ip = ip | ((*block_64 & 0x10000) << 26 -16);                    // 48
-	ip = ip | ((*block_64 & 0x1000000) <<27 - 24);                 // 40
+	ip = ip | ((*block_64 & 0x10000) << 26 - 16);                    // 48
+	ip = ip | ((*block_64 & 0x1000000) << 27 - 24);                 // 40
 	ip = ip | ((*block_64 & 0x100000000) >> 32 - 28);               // 32
 	ip = ip | ((*block_64 & 0x10000000000) >> 40 - 29);             // 24
 	ip = ip | ((*block_64 & 0x1000000000000) >> 48 - 30);            // 16
@@ -51,9 +51,9 @@ QWORD make_ip(QWORD* block_64)
 	ip = ip | ((*block_64 & 0x8000000000000000) >> 63 - 39);        // 1
 
 	ip = ip | ((*block_64 & 0x20) << 40 - 5);                        // 59
-	ip = ip | ((*block_64 & 0x2000) <<41 - 13);                     // 51
+	ip = ip | ((*block_64 & 0x2000) << 41 - 13);                     // 51
 	ip = ip | ((*block_64 & 0x200000) << 42 - 21);                   // 43
-	ip = ip | ((*block_64 & 0x20000000) <<43 - 29);                // 35
+	ip = ip | ((*block_64 & 0x20000000) << 43 - 29);                // 35
 	ip = ip | ((*block_64 & 0x2000000000) << 44 - 37);              // 27
 	ip = ip | ((*block_64 & 0x200000000000) >> 45 - 45);            // 19
 	ip = ip | ((*block_64 & 0x20000000000000) >> 53 - 46);          // 11
@@ -64,7 +64,7 @@ QWORD make_ip(QWORD* block_64)
 	ip = ip | ((*block_64 & 0x80000) << 50 - 19);                    // 45
 	ip = ip | ((*block_64 & 0x8000000) << 51 - 27);                 // 37
 	ip = ip | ((*block_64 & 0x800000000) << 52 - 35);                // 29
-	ip = ip | ((*block_64 & 0x80000000000) <<53 - 43);             // 21
+	ip = ip | ((*block_64 & 0x80000000000) << 53 - 43);             // 21
 	ip = ip | ((*block_64 & 0x8000000000000) << 54 - 51);            // 13
 	ip = ip | ((*block_64 & 0x800000000000000) >> 59 - 55);          // 5
 
@@ -84,12 +84,12 @@ void split_ip(QWORD ip)
 {
 	// Преобразуем 32-битный h-буфер; отбрасываем последние 32 бита
 	DWORD h = ip >> 32;
-	
+
 
 	// Преобразуем 32-битный l-буфер; отбрасываем первые 32 бита
-	
+
 	DWORD l = (ip << 32) >> 32;
-	
+
 }
 
 
@@ -157,21 +157,670 @@ void make_f(DWORD l, QWORD k)
 	make_e(l);
 }
 
+BYTE make_t1(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 14;
+		if (column == 1) return 4;
+		if (column == 2) return 13;
+		if (column == 3) return 1;
+		if (column == 4) return 2;
+		if (column == 5) return 15;
+		if (column == 6) return 11;
+		if (column == 7) return 8;
+		if (column == 8) return 3;
+		if (column == 9) return 10;
+		if (column == 10) return 6;
+		if (column == 11) return 12;
+		if (column == 12) return 5;
+		if (column == 13) return 9;
+		if (column == 14) return 0;
+		if (column == 15) return 7;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 0;
+		if (column == 1) return 15;
+		if (column == 2) return 7;
+		if (column == 3) return 4;
+		if (column == 4) return 14;
+		if (column == 5) return 2;
+		if (column == 6) return 13;
+		if (column == 7) return 1;
+		if (column == 8) return 10;
+		if (column == 9) return 6;
+		if (column == 10) return 12;
+		if (column == 11) return 11;
+		if (column == 12) return 9;
+		if (column == 13) return 5;
+		if (column == 14) return 3;
+		if (column == 15) return 8;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 4;
+		if (column == 1) return 1;
+		if (column == 2) return 14;
+		if (column == 3) return 8;
+		if (column == 4) return 13;
+		if (column == 5) return 6;
+		if (column == 6) return 2;
+		if (column == 7) return 11;
+		if (column == 8) return 15;
+		if (column == 9) return 12;
+		if (column == 10) return 9;
+		if (column == 11) return 7;
+		if (column == 12) return 3;
+		if (column == 13) return 10;
+		if (column == 14) return 5;
+		if (column == 15) return 0;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 5;
+		if (column == 1) return 12;
+		if (column == 2) return 8;
+		if (column == 3) return 2;
+		if (column == 4) return 4;
+		if (column == 5) return 9;
+		if (column == 6) return 1;
+		if (column == 7) return 7;
+		if (column == 8) return 5;
+		if (column == 9) return 11;
+		if (column == 10) return 3;
+		if (column == 11) return 14;
+		if (column == 12) return 10;
+		if (column == 13) return 0;
+		if (column == 14) return 6;
+		if (column == 15) return 13;
+	}
+}
+
+
+BYTE make_t2(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 15;
+		if (column == 1) return 1;
+		if (column == 2) return 8;
+		if (column == 3) return 14;
+		if (column == 4) return 6;
+		if (column == 5) return 11;
+		if (column == 6) return 3;
+		if (column == 7) return 4;
+		if (column == 8) return 9;
+		if (column == 9) return 7;
+		if (column == 10) return 2;
+		if (column == 11) return 13;
+		if (column == 12) return 12;
+		if (column == 13) return 0;
+		if (column == 14) return 5;
+		if (column == 15) return 10;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 3;
+		if (column == 1) return 13;
+		if (column == 2) return 4;
+		if (column == 3) return 7;
+		if (column == 4) return 15;
+		if (column == 5) return 2;
+		if (column == 6) return 8;
+		if (column == 7) return 14;
+		if (column == 8) return 12;
+		if (column == 9) return 0;
+		if (column == 10) return 1;
+		if (column == 11) return 10;
+		if (column == 12) return 6;
+		if (column == 13) return 9;
+		if (column == 14) return 11;
+		if (column == 15) return 5;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 0;
+		if (column == 1) return 14;
+		if (column == 2) return 7;
+		if (column == 3) return 11;
+		if (column == 4) return 10;
+		if (column == 5) return 4;
+		if (column == 6) return 13;
+		if (column == 7) return 1;
+		if (column == 8) return 5;
+		if (column == 9) return 8;
+		if (column == 10) return 12;
+		if (column == 11) return 6;
+		if (column == 12) return 9;
+		if (column == 13) return 3;
+		if (column == 14) return 2;
+		if (column == 15) return 15;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 13;
+		if (column == 1) return 8;
+		if (column == 2) return 10;
+		if (column == 3) return 1;
+		if (column == 4) return 3;
+		if (column == 5) return 15;
+		if (column == 6) return 4;
+		if (column == 7) return 2;
+		if (column == 8) return 11;
+		if (column == 9) return 6;
+		if (column == 10) return 7;
+		if (column == 11) return 12;
+		if (column == 12) return 0;
+		if (column == 13) return 5;
+		if (column == 14) return 14;
+		if (column == 15) return 9;
+	}
+}
+
+BYTE make_t3(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 10;
+		if (column == 1) return 0;
+		if (column == 2) return 9;
+		if (column == 3) return 14;
+		if (column == 4) return 6;
+		if (column == 5) return 3;
+		if (column == 6) return 15;
+		if (column == 7) return 5;
+		if (column == 8) return 1;
+		if (column == 9) return 13;
+		if (column == 10) return 12;
+		if (column == 11) return 7;
+		if (column == 12) return 11;
+		if (column == 13) return 4;
+		if (column == 14) return 2;
+		if (column == 15) return 8;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 13;
+		if (column == 1) return 7;
+		if (column == 2) return 0;
+		if (column == 3) return 9;
+		if (column == 4) return 3;
+		if (column == 5) return 4;
+		if (column == 6) return 6;
+		if (column == 7) return 10;
+		if (column == 8) return 2;
+		if (column == 9) return 8;
+		if (column == 10) return 5;
+		if (column == 11) return 14;
+		if (column == 12) return 12;
+		if (column == 13) return 11;
+		if (column == 14) return 15;
+		if (column == 15) return 1;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 13;
+		if (column == 1) return 6;
+		if (column == 2) return 4;
+		if (column == 3) return 9;
+		if (column == 4) return 8;
+		if (column == 5) return 15;
+		if (column == 6) return 3;
+		if (column == 7) return 0;
+		if (column == 8) return 11;
+		if (column == 9) return 1;
+		if (column == 10) return 2;
+		if (column == 11) return 12;
+		if (column == 12) return 5;
+		if (column == 13) return 10;
+		if (column == 14) return 14;
+		if (column == 15) return 7;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 1;
+		if (column == 1) return 10;
+		if (column == 2) return 13;
+		if (column == 3) return 0;
+		if (column == 4) return 6;
+		if (column == 5) return 9;
+		if (column == 6) return 8;
+		if (column == 7) return 7;
+		if (column == 8) return 4;
+		if (column == 9) return 15;
+		if (column == 10) return 14;
+		if (column == 11) return 3;
+		if (column == 12) return 11;
+		if (column == 13) return 5;
+		if (column == 14) return 2;
+		if (column == 15) return 12;
+	}
+}
+
+BYTE make_t4(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 7;
+		if (column == 1) return 13;
+		if (column == 2) return 14;
+		if (column == 3) return 3;
+		if (column == 4) return 0;
+		if (column == 5) return 6;
+		if (column == 6) return 9;
+		if (column == 7) return 10;
+		if (column == 8) return 1;
+		if (column == 9) return 2;
+		if (column == 10) return 8;
+		if (column == 11) return 5;
+		if (column == 12) return 11;
+		if (column == 13) return 12;
+		if (column == 14) return 4;
+		if (column == 15) return 15;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 13;
+		if (column == 1) return 8;
+		if (column == 2) return 11;
+		if (column == 3) return 5;
+		if (column == 4) return 6;
+		if (column == 5) return 15;
+		if (column == 6) return 0;
+		if (column == 7) return 3;
+		if (column == 8) return 4;
+		if (column == 9) return 7;
+		if (column == 10) return 2;
+		if (column == 11) return 12;
+		if (column == 12) return 1;
+		if (column == 13) return 10;
+		if (column == 14) return 14;
+		if (column == 15) return 9;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 10;
+		if (column == 1) return 6;
+		if (column == 2) return 9;
+		if (column == 3) return 0;
+		if (column == 4) return 12;
+		if (column == 5) return 11;
+		if (column == 6) return 7;
+		if (column == 7) return 13;
+		if (column == 8) return 15;
+		if (column == 9) return 1;
+		if (column == 10) return 3;
+		if (column == 11) return 14;
+		if (column == 12) return 5;
+		if (column == 13) return 2;
+		if (column == 14) return 8;
+		if (column == 15) return 4;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 3;
+		if (column == 1) return 15;
+		if (column == 2) return 0;
+		if (column == 3) return 6;
+		if (column == 4) return 10;
+		if (column == 5) return 1;
+		if (column == 6) return 13;
+		if (column == 7) return 8;
+		if (column == 8) return 9;
+		if (column == 9) return 4;
+		if (column == 10) return 5;
+		if (column == 11) return 11;
+		if (column == 12) return 12;
+		if (column == 13) return 7;
+		if (column == 14) return 2;
+		if (column == 15) return 14;
+	}
+}
+
+BYTE make_t5(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 2;
+		if (column == 1) return 12;
+		if (column == 2) return 4;
+		if (column == 3) return 1;
+		if (column == 4) return 7;
+		if (column == 5) return 10;
+		if (column == 6) return 11;
+		if (column == 7) return 6;
+		if (column == 8) return 8;
+		if (column == 9) return 5;
+		if (column == 10) return 3;
+		if (column == 11) return 15;
+		if (column == 12) return 13;
+		if (column == 13) return 0;
+		if (column == 14) return 14;
+		if (column == 15) return 9;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 14;
+		if (column == 1) return 11;
+		if (column == 2) return 2;
+		if (column == 3) return 12;
+		if (column == 4) return 4;
+		if (column == 5) return 7;
+		if (column == 6) return 13;
+		if (column == 7) return 1;
+		if (column == 8) return 5;
+		if (column == 9) return 0;
+		if (column == 10) return 15;
+		if (column == 11) return 10;
+		if (column == 12) return 3;
+		if (column == 13) return 9;
+		if (column == 14) return 8;
+		if (column == 15) return 6;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 4;
+		if (column == 1) return 2;
+		if (column == 2) return 1;
+		if (column == 3) return 11;
+		if (column == 4) return 10;
+		if (column == 5) return 13;
+		if (column == 6) return 7;
+		if (column == 7) return 8;
+		if (column == 8) return 15;
+		if (column == 9) return 9;
+		if (column == 10) return 12;
+		if (column == 11) return 5;
+		if (column == 12) return 6;
+		if (column == 13) return 3;
+		if (column == 14) return 0;
+		if (column == 15) return 14;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 11;
+		if (column == 1) return 8;
+		if (column == 2) return 12;
+		if (column == 3) return 7;
+		if (column == 4) return 1;
+		if (column == 5) return 14;
+		if (column == 6) return 2;
+		if (column == 7) return 13;
+		if (column == 8) return 6;
+		if (column == 9) return 15;
+		if (column == 10) return 0;
+		if (column == 11) return 9;
+		if (column == 12) return 10;
+		if (column == 13) return 4;
+		if (column == 14) return 5;
+		if (column == 15) return 3;
+	}
+}
+BYTE make_t6(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 2;
+		if (column == 1) return 1;
+		if (column == 2) return 10;
+		if (column == 3) return 15;
+		if (column == 4) return 9;
+		if (column == 5) return 2;
+		if (column == 6) return 6;
+		if (column == 7) return 8;
+		if (column == 8) return 0;
+		if (column == 9) return 13;
+		if (column == 10) return 3;
+		if (column == 11) return 4;
+		if (column == 12) return 14;
+		if (column == 13) return 7;
+		if (column == 14) return 5;
+		if (column == 15) return 11;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 10;
+		if (column == 1) return 15;
+		if (column == 2) return 4;
+		if (column == 3) return 2;
+		if (column == 4) return 7;
+		if (column == 5) return 12;
+		if (column == 6) return 9;
+		if (column == 7) return 5;
+		if (column == 8) return 6;
+		if (column == 9) return 1;
+		if (column == 10) return 13;
+		if (column == 11) return 14;
+		if (column == 12) return 0;
+		if (column == 13) return 11;
+		if (column == 14) return 3;
+		if (column == 15) return 8;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return	9;
+		if (column == 1) return	14;
+		if (column == 2) return	15;
+		if (column == 3) return	5;
+		if (column == 4) return	2;
+		if (column == 5) return	8;
+		if (column == 6) return	12;
+		if (column == 7) return	3;
+		if (column == 8) return	7;
+		if (column == 9) return	0;
+		if (column == 10) return 4;
+		if (column == 11) return 10;
+		if (column == 12) return 1;
+		if (column == 13) return 13;
+		if (column == 14) return 11;
+		if (column == 15) return 6;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 4;
+		if (column == 1) return 3;
+		if (column == 2) return 2;
+		if (column == 3) return 12;
+		if (column == 4) return 9;
+		if (column == 5) return 5;
+		if (column == 6) return 15;
+		if (column == 7) return 10;
+		if (column == 8) return 11;
+		if (column == 9) return 14;
+		if (column == 10) return 1;
+		if (column == 11) return 7;
+		if (column == 12) return 6;
+		if (column == 13) return 0;
+		if (column == 14) return 8;
+		if (column == 15) return 13;
+	}
+}
+
+BYTE make_t7(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 4;
+		if (column == 1) return 11;
+		if (column == 2) return 2;
+		if (column == 3) return 14;
+		if (column == 4) return 15;
+		if (column == 5) return 0;
+		if (column == 6) return 8;
+		if (column == 7) return 13;
+		if (column == 8) return 3;
+		if (column == 9) return 12;
+		if (column == 10) return 9;
+		if (column == 11) return 7;
+		if (column == 12) return 5;
+		if (column == 13) return 10;
+		if (column == 14) return 6;
+		if (column == 15) return 1;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 13;
+		if (column == 1) return 0;
+		if (column == 2) return 11;
+		if (column == 3) return 7;
+		if (column == 4) return 4;
+		if (column == 5) return 9;
+		if (column == 6) return 1;
+		if (column == 7) return 10;
+		if (column == 8) return 14;
+		if (column == 9) return 3;
+		if (column == 10) return 5;
+		if (column == 11) return 12;
+		if (column == 12) return 2;
+		if (column == 13) return 15;
+		if (column == 14) return 8;
+		if (column == 15) return 6;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 1;
+		if (column == 1) return 4;
+		if (column == 2) return 11;
+		if (column == 3) return 13;
+		if (column == 4) return 12;
+		if (column == 5) return 3;
+		if (column == 6) return 7;
+		if (column == 7) return 14;
+		if (column == 8) return 10;
+		if (column == 9) return 15;
+		if (column == 10) return 6;
+		if (column == 11) return 8;
+		if (column == 12) return 0;
+		if (column == 13) return 5;
+		if (column == 14) return 9;
+		if (column == 15) return 2;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 6;
+		if (column == 1) return 11;
+		if (column == 2) return 13;
+		if (column == 3) return 8;
+		if (column == 4) return 1;
+		if (column == 5) return 4;
+		if (column == 6) return 10;
+		if (column == 7) return 7;
+		if (column == 8) return 9;
+		if (column == 9) return 5;
+		if (column == 10) return 0;
+		if (column == 11) return 15;
+		if (column == 12) return 14;
+		if (column == 13) return 2;
+		if (column == 14) return 3;
+		if (column == 15) return 12;
+	}
+}
+
+BYTE make_t7(BYTE row, BYTE column)
+{
+	if (row == 0)
+	{
+		if (column == 0) return 13;																
+		if (column == 1) return 2;
+		if (column == 2) return 8;
+		if (column == 3) return 4;
+		if (column == 4) return 6;
+		if (column == 5) return 15;
+		if (column == 6) return 11;
+		if (column == 7) return 1;
+		if (column == 8) return 10;
+		if (column == 9) return 9;
+		if (column == 10) return 3;
+		if (column == 11) return 14;
+		if (column == 12) return 5;
+		if (column == 13) return 0;
+		if (column == 14) return 12;
+		if (column == 15) return 7;
+	}
+	if (row == 1)
+	{
+		if (column == 0) return 1;																	
+		if (column == 1) return 15;
+		if (column == 2) return 13;
+		if (column == 3) return 8;
+		if (column == 4) return 10;
+		if (column == 5) return 3;
+		if (column == 6) return 7;
+		if (column == 7) return 4;
+		if (column == 8) return 12;
+		if (column == 9) return 5;
+		if (column == 10) return 6;
+		if (column == 11) return 11;
+		if (column == 12) return 0;
+		if (column == 13) return 14;
+		if (column == 14) return 9;
+		if (column == 15) return 2;
+	}
+
+	if (row == 2)
+	{
+		if (column == 0) return 7;																		
+		if (column == 1) return 11;
+		if (column == 2) return 4;
+		if (column == 3) return 1;
+		if (column == 4) return 9;
+		if (column == 5) return 12;
+		if (column == 6) return 14;
+		if (column == 7) return 2;
+		if (column == 8) return 0;
+		if (column == 9) return 6;
+		if (column == 10) return 10;
+		if (column == 11) return 13;
+		if (column == 12) return 15;
+		if (column == 13) return 3;
+		if (column == 14) return 5;
+		if (column == 15) return 8;
+	}
+	if (row == 3)
+	{
+		if (column == 0) return 2;																		
+		if (column == 1) return 1;
+		if (column == 2) return 14;
+		if (column == 3) return 7;
+		if (column == 4) return 4;
+		if (column == 5) return 10;
+		if (column == 6) return 8;
+		if (column == 7) return 13;
+		if (column == 8) return 15;
+		if (column == 9) return 12;
+		if (column == 10) return 9;
+		if (column == 11) return 0;
+		if (column == 12) return 3;
+		if (column == 13) return 5;
+		if (column == 14) return 6;
+		if (column == 15) return 11;
+	}
+}
+
+
+
+
+
 void make_h_dash(QWORD h)
 {
 	// 48-битовый блок данных H разделяется на восемь 6-битовых фрагментов, обозначенных h1, h2, …, h8.
 
 	/*h1 = h | 0xFC00000000000000;
 	h2 = h | 0x3F0000000000000;
-
 	h3 = h | 0xFC00000000000;
 	h4 = h | 0x3F0000000000;
 	h5 = h | 0xFC00000000;
 	h6 = h | 0x3F0000000;
 	h7 = h | 0xFC00000;
 	h8 = h | 0x3F0000;*/
-
-	QWORD test = 0xFC00000000000000 >> 6;
 
 	// проблема со скобками
 	BYTE h1 = 0, h2 = 0, h3 = 0, h4 = 0, h5 = 0, h6 = 0, h7 = 0, h8 = 0;
@@ -183,10 +832,18 @@ void make_h_dash(QWORD h)
 	h6 = (h & (0xFC00000000000000 >> 30)) >> 64 - 8 * 6 + 10;
 	h7 = (h & (0xFC00000000000000 >> 36)) >> 64 - 8 * 7 + 12;
 	h8 = (h & (0xFC00000000000000 >> 42)) >> 64 - 8 * 8 + 14;
-			   
+
 	// Каждое из значений hj преобразуется в новое 4-битовое значение tj с помощью соответствующего узла замены Sj.
-	
+	BYTE row = 0, column = 0;
+	BYTE tmpRow = 0;
+	tmpRow = (h1 & 0x20) >> 4;			// 0010 0000
+	row = (h1 & 0x2) >> 1;				// 0000 0010
+	row = row | tmpRow;
+
+	column = (h1 & 0x1E) >> 1;			// 011110
 }
+
+
 
 void ecb_cipher(BYTE* plain_text)
 {
@@ -199,5 +856,5 @@ void ecb_cipher(BYTE* plain_text)
 	//QWORD H = x ^ k;
 	QWORD h_dash_test = 0x3F0000;
 	make_h_dash(h_dash_test);
-	
+
 }
