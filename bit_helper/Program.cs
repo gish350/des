@@ -91,6 +91,34 @@ namespace bit_helper
             Console.ReadKey();
         }
 
+        static void gen_ip1()
+        {
+            List<int> nums = new List<int>() {40,    8,   48,  16,  56,  24,  64,  32,
+                                            39,  7  , 47,  15,  55,  23,  63,  31,
+                                            38,  6 ,  46 , 14,  54,  22,  62,  30,
+                                            37,  5,   45,  13,  53,  21,  61,  29,
+                                            36,  4,   44,  12,  52,  20,  60,  28,
+                                            35,  3  , 43,  11,  51,  19,  59,  27,
+                                            34,  2 ,  42,  10,  50,  18,  58,  26,
+                                            33,  1,   41,  9,   49,  17,  57,  25};
+            int i = 0;
+            foreach (int bitPosition in nums)
+            {
+                ulong number = 0;
+                number |= (1UL << (63 - (bitPosition - 1))); // Установка указанного бита в единицу
+
+                // Вычисление количества бит, на которое нужно сместить вправо, чтобы получить 1
+                int shiftCount = 63 - (bitPosition - 1);
+
+                // Вывод результата в шестнадцатеричном формате
+
+
+                Console.WriteLine($"ip = ip | ((*block_64 & 0x{number:X}) >> {shiftCount} - {i}); \t\t\t // {bitPosition}");
+                i++;
+            }
+            Console.ReadKey();
+        }
+
         static void gen_e()
         {
             List<int> nums = new List<int>() { 32,   1,   2,   3,   4,   5,
@@ -131,6 +159,9 @@ namespace bit_helper
                 gen_e();
             else if (n ==4)
                 make_p();
+            else if (n ==5)
+                gen_ip1();
+            
             else
             {
                 while (true)
