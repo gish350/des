@@ -163,12 +163,12 @@ QWORD make_ip1(QWORD* block_64)
 void split_ip(QWORD ip, DWORD* h, DWORD* l)
 {
 	// Преобразуем 32-битный h-буфер; отбрасываем последние 32 бита
-	h = ip >> 32;
+	*h = ip >> 32;
 
 
 	// Преобразуем 32-битный l-буфер; отбрасываем первые 32 бита
 
-	l = (ip << 32) >> 32;
+	*l = (ip << 32) >> 32;
 
 }
 
@@ -178,7 +178,7 @@ QWORD make_e(DWORD l)
 {
 	QWORD e = 0;
 	QWORD tmp_l = 0;
-	tmp_l = (tmp_l | *l) << 32;
+	tmp_l = (tmp_l | l) << 32;
 
 	e = e | ((tmp_l & 0x40) >> 6 - 0);											  // 58
 
@@ -1036,21 +1036,13 @@ DWORD make_l(QWORD h)
 	return l;
 }
 
-void do_feistel(DWORD* h, DWORD* l, QWORD k, int i)
+QWORD ecb_cipher(BYTE* plain_text, QWORD key)
 {
-	
-	make_f(l, k);
 
-	QWORD h_dash_test = 0x3F0000;
-	make_h_dash(h_dash_test);
-
-}
-
-void ecb_cipher(BYTE* plain_text, QWORD key)
-{
-	// Выработка ключевых элементов
 	key_correction(&key); 
-	make_k1(QWORD pc1);
+
+	// Выработка ключевых элементов
+	make_k_keys(key);
 
 	// Зашифрование
 
@@ -1074,7 +1066,7 @@ void ecb_cipher(BYTE* plain_text, QWORD key)
 		l_tmp = 0;
 		f_result = 0;
 
-		f_result = make_f(&l, *((QWORD*)k1_buffer + i)); // !проверить как ключевые элементы размещаются в памяти (+8)!
+		f_result = make_f(&l, *((QWORD*)k_keys_buffer + i)); // !проверить как ключевые элементы размещаются в памяти (+8)!
 		l_tmp = l;
 		l = h ^ f_result;
 		h = l_tmp;
@@ -1084,21 +1076,20 @@ void ecb_cipher(BYTE* plain_text, QWORD key)
 	l_tmp = 0;
 	f_result = 0;
 
-	f_result = make_f(&l, *((QWORD*)k1_buffer + i)); // !проверить как ключевые элементы размещаются в памяти (+8)!
+	f_result = make_f(&l, *((QWORD*)k_keys_buffer + i)); // !проверить как ключевые элементы размещаются в памяти (+8)!
 	l = h ^ f_result;
 	
-	// Половинки H17 и L17 объединяются в полный блок Т**, в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
-	DWORD ip1 = 0;
-	ip1 = make_ip1(); // функция не протестирована
-
+	// Половинки H17 и L17 объединяются в полный блок Т**, 
+	QWORD t_star_star = 0;
+	t_star_star = h;
+	t_star_star = t_star_star << 32;
+	QWORD l_tmp = 0;
+	l_tmp = l;
+	l_tmp = l_tmp << 4;
+	t_star_star = t_star_star | l_tmp;
 	
-	// do_feistel(&h, &l); убрать функцию
-
-	//QWORD H = x ^ k;
-
-	DWORD make_e_test = 0xFFFFFFFF;
-	make_e(make_e_test);
-	
-	
-
+	// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
+	QWORD c = 0;
+	c = make_ip1(&t_star_star); // функция не протестирована
+	return c;
 }

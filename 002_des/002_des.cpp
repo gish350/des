@@ -18,13 +18,9 @@ int main()
     DWORD newTextSize = TRUNC(text_size, 8); // выравнивание по 64 битным блокам
     BYTE* hPlainText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, newTextSize);
     memmove(hPlainText, &plain_text, text_size);
-    ecb_cipher(hPlainText);
-
-    key_correction(&key);
-    QWORD pc1_key = 0; 
-    pc1_key = pc1(&key);
-    make_k1(pc1_key);
-        
+    QWORD c_text = 0;
+    c_text = ecb_cipher(hPlainText, key);
+    
     return 0;
 }
 

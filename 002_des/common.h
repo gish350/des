@@ -1,4 +1,4 @@
 #pragma once
 #include <windows.h>
 #include <winDNS.h>
-BYTE* k1_buffer;
+BYTE* k_keys_buffer;

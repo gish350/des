@@ -31,12 +31,6 @@ void key_correction(LPVOID key)
 	key = (BYTE*)key - 8; // возврат указателя в начало
 }
 
-QWORD get_bit(QWORD bit, int sh)
-{
-	int rsh = 64 - sh - 1;
-	return bit << rsh;
-}
-
 QWORD make_pc1(QWORD* hKey)
 {
 	QWORD pc1_key = 0;
@@ -133,7 +127,7 @@ void make_shift(DWORD* hH, DWORD* hL, int i)
 }
 
 
-void make_pc2(DWORD h, DWORD l, int k)
+void make_k_key(DWORD h, DWORD l, int k)
 {
 	// объединяем h и l
 	QWORD hlUnion = 0;
@@ -201,11 +195,11 @@ void make_pc2(DWORD h, DWORD l, int k)
 	tmpBuffer = tmpBuffer | (hlUnion & 0x800000000) << 46 - 35;						  // 29
 	tmpBuffer = tmpBuffer | (hlUnion & 0x100000000) << 47 - 32;                       // 32
 
-	memmove(k1_buffer + k, (BYTE*)&tmpBuffer, k);
+	memmove(k_keys_buffer + k, (BYTE*)&tmpBuffer, k);
 }
 
 
-void make_k1(QWORD key)
+void make_k_keys(QWORD key)
 {
 	// Выработка ключевых элементов из ключа K начинается со входной выборки-перестановки битов PC1,
 	// которая отбирает 56 из 64 битов ключа и располагает их в другом порядке.
@@ -217,7 +211,7 @@ void make_k1(QWORD key)
 
 
 	// 48 * 16 / 8 = 96 байт (64 * 16 / 8 = 128)- суммарный размер блоков k1 
-	k1_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 128);
+	k_keys_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 128);
 
 	int i = 0;
 	int k = 0;
@@ -228,7 +222,7 @@ void make_k1(QWORD key)
 		make_shift(&h, &l, i);
 		// После сдвига половинки объединяются и из них с помощью выборки-перестановки PC2 отбираются 48 битов, 
 		// которые и формируют очередной ключевой элемент.
-		make_pc2(h, l, k);
+		make_k_key(h, l, k);
 		k += 8; // 6 байт (48 бит) размер одного k1 элемента (сделал 8 для удобства обращения)
 		i++;
 	}
