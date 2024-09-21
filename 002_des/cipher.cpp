@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <winDNS.h>
 #include "keys.h"
+#include "common.h"
 
 QWORD make_ip(QWORD* block_64)
 {
@@ -95,11 +96,11 @@ void split_ip(QWORD ip, DWORD* h, DWORD* l)
 
 
 
-void make_e(DWORD l)
+QWORD make_e(DWORD l)
 {
 	QWORD e = 0;
 	QWORD tmp_l = 0;
-	tmp_l = (tmp_l | l) << 32;
+	tmp_l = (tmp_l | *l) << 32;
 
 	e = e | ((tmp_l & 0x40) >> 6 - 0);											  // 58
 
@@ -151,21 +152,25 @@ void make_e(DWORD l)
 	e = e | ((tmp_l & 0x200000000) << 45 - 33);                             //31
 	e = e | ((tmp_l & 0x100000000) << 46 - 32);                             //32
 	e = e | ((tmp_l & 0x8000000000000000) >> 63 - 47);                              //1
+	
+	return e;
 }
 
-void make_f(DWORD l, QWORD k)
+DWORD make_f(DWORD* l, QWORD k)
 {
 	// На вход поступает 32-битовая половинка шифруемого блока Li и 48-битовый ключевой элемент ki.
-
 	// Li разбивается на 8 тетрад по 4 бита. 
 	// Каждая тетрада по циклическому закону дополняется крайними битами из соседних тетрад до 6-битового фрагмента (функция расширения Е)
-	make_e(l);
+	QWORD e = 0;
+	e = make_e(*l); // указатель не нужен?
 
-	// xor placeholder
+	// Х побитово суммируется по модулю 2 с ключевым элементом ki.
+	QWORD h = e ^ k;
 
-	// Далее выполняется объединение фрагментов в 48-битовый блок X.
-	
-}
+	DWORD l_out = 0;
+	l_out = make_l(h);
+	return l_out;
+}	
 
 BYTE make_t1(BYTE row, BYTE column)
 {
@@ -815,7 +820,7 @@ BYTE make_t8(BYTE row, BYTE column)
 	}
 }
 
-void make_p(DWORD h_dash)
+DWORD make_p(DWORD h_dash)
 {
 	DWORD p = 0;
 	p = p | ((h_dash & 0x10000) >> (16 - 0));                       // 16
@@ -853,6 +858,8 @@ void make_p(DWORD h_dash)
 	p = p | ((h_dash & 0x200000) << (29 - 21));                     // 11
 	p = p | ((h_dash & 0x10000000) << (30 - 28));                   // 4
 	p = p | ((h_dash & 0x80) << (31 - 7));						  // 25
+
+	return p;
 }
 
 void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
@@ -867,7 +874,7 @@ void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
 	*out_col = (h & 0x1E) >> 1;			// 011110
 }
 
-void make_h_dash(QWORD h)
+DWORD make_l(QWORD h)
 {
 	// 48-битовый блок данных H разделяется на восемь 6-битовых фрагментов, обозначенных h1, h2, …, h8.
 
@@ -946,11 +953,14 @@ void make_h_dash(QWORD h)
 
 	// Для H’ выполняется перестановка битов P.
 	DWORD p_test = 0xFFFFFFFF;
-	make_p(p_test);
+	DWORD l = 0;
+	l = make_p(p_test);
+	return l;
 }
 
-void do_feistel(DWORD h, DWORD l, QWORD k, int i)
+void do_feistel(DWORD* h, DWORD* l, QWORD k, int i)
 {
+	
 	make_f(l, k);
 
 	QWORD h_dash_test = 0x3F0000;
@@ -973,10 +983,18 @@ void ecb_cipher(BYTE* plain_text, QWORD key)
 	make_ip(&ip_test);
 
 	// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
-	// с которыми выполняются 16 раундов преобразования(ячеек Фейстеля)
 	QWORD split_ip_test = 0xAAAAAAAABBBBBBBB;
-	split_ip(split_ip_test);
-	do_feistel();
+	DWORD h = 0, l = 0;
+	split_ip(split_ip_test, &h, &l);
+
+	// с которыми выполняются 16 раундов преобразования(ячеек Фейстеля)
+	int i = 0;
+	while (i < 16)
+	{
+		make_f(&l, *((QWORD*)k1_buffer + i)); // !проверить как ключевые элементы размещаются в памяти (+8)!
+	}
+	
+	// do_feistel(&h, &l); убрать функцию
 
 	//QWORD H = x ^ k;
 

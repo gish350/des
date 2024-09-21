@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <winDNS.h>
+#include "common.h"
 
 // Коррекция ключа: требуется, чтобы сумма битов каждого байта ключа, 
 // включая контрольный, была нечетной (нечетный паритетный бит).
@@ -130,7 +131,8 @@ void make_shift(DWORD* hH, DWORD* hL, int i)
 		*hH = *hH << 2;
 	}
 }
-BYTE* k1_buffer;
+
+
 void make_pc2(DWORD h, DWORD l, int k)
 {
 	// объединяем h и l
@@ -199,13 +201,7 @@ void make_pc2(DWORD h, DWORD l, int k)
 	tmpBuffer = tmpBuffer | (hlUnion & 0x800000000) << 46 - 35;						  // 29
 	tmpBuffer = tmpBuffer | (hlUnion & 0x100000000) << 47 - 32;                       // 32
 
-	memmove(k1_buffer + k, (BYTE*)&tmpBuffer, 6);
-
-
-
-
-
-
+	memmove(k1_buffer + k, (BYTE*)&tmpBuffer, k);
 }
 
 
@@ -220,8 +216,8 @@ void make_k1(QWORD key)
 	split_pc1(&pc1, h, l);
 
 
-	// 48 * 16 / 8 = 96 байт - суммарный размер блоков k1
-	k1_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 96);
+	// 48 * 16 / 8 = 96 байт (64 * 16 / 8 = 128)- суммарный размер блоков k1 
+	k1_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 128);
 
 	int i = 0;
 	int k = 0;
@@ -233,7 +229,7 @@ void make_k1(QWORD key)
 		// После сдвига половинки объединяются и из них с помощью выборки-перестановки PC2 отбираются 48 битов, 
 		// которые и формируют очередной ключевой элемент.
 		make_pc2(h, l, k);
-		k += 6; // 6 байт (48 бит) размер одного k1 элемента
+		k += 8; // 6 байт (48 бит) размер одного k1 элемента (сделал 8 для удобства обращения)
 		i++;
 	}
 }
