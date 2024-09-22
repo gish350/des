@@ -3,6 +3,9 @@
 #include "keys.h"
 #include "common.h"
 
+
+
+
 QWORD make_ip(QWORD* block_64)
 {
 	QWORD ip = 0;
@@ -165,14 +168,21 @@ void split_ip(QWORD ip, DWORD* h, DWORD* l)
 	// Преобразуем 32-битный h-буфер; отбрасываем последние 32 бита
 	*h = ip >> 32;
 
-
 	// Преобразуем 32-битный l-буфер; отбрасываем первые 32 бита
-
 	*l = (ip << 32) >> 32;
-
 }
 
+void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
+{
+	*out_row = 0;
+	*out_col = 0;
+	BYTE tmpRow = 0;
+	tmpRow = (h & 0x20) >> 4;			// 0010 0000
+	*out_row = (h & 0x2) >> 1;			// 0000 0010
 
+	*out_row = *out_row | tmpRow;
+	*out_col = (h & 0x1E) >> 1;			// 011110
+}
 
 QWORD make_e(DWORD l)
 {
@@ -233,22 +243,6 @@ QWORD make_e(DWORD l)
 	
 	return e;
 }
-
-DWORD make_f(DWORD* l, QWORD k)
-{
-	// На вход поступает 32-битовая половинка шифруемого блока Li и 48-битовый ключевой элемент ki.
-	// Li разбивается на 8 тетрад по 4 бита. 
-	// Каждая тетрада по циклическому закону дополняется крайними битами из соседних тетрад до 6-битового фрагмента (функция расширения Е)
-	QWORD e = 0;
-	e = make_e(*l); // указатель не нужен?
-
-	// Х побитово суммируется по модулю 2 с ключевым элементом ki.
-	QWORD h = e ^ k;
-
-	DWORD l_out = 0;
-	l_out = make_l(h);
-	return l_out;
-}	
 
 #pragma region MAKE Tn
 BYTE make_t1(BYTE row, BYTE column)
@@ -942,18 +936,6 @@ DWORD make_p(DWORD h_dash)
 	return p;
 }
 
-void get_row_col(BYTE h, BYTE* out_row, BYTE* out_col)
-{
-	*out_row = 0;
-	*out_col = 0;
-	BYTE tmpRow = 0;
-	tmpRow = (h & 0x20) >> 4;			// 0010 0000
-	*out_row = (h & 0x2) >> 1;			// 0000 0010
-
-	*out_row = *out_row | tmpRow;
-	*out_col = (h & 0x1E) >> 1;			// 011110
-}
-
 DWORD make_l(QWORD h)
 {
 	// 48-битовый блок данных H разделяется на восемь 6-битовых фрагментов, обозначенных h1, h2, …, h8.
@@ -1038,6 +1020,22 @@ DWORD make_l(QWORD h)
 	return l;
 }
 
+DWORD make_f(DWORD* l, QWORD k)
+{
+	// На вход поступает 32-битовая половинка шифруемого блока Li и 48-битовый ключевой элемент ki.
+	// Li разбивается на 8 тетрад по 4 бита. 
+	// Каждая тетрада по циклическому закону дополняется крайними битами из соседних тетрад до 6-битового фрагмента (функция расширения Е)
+	QWORD e = 0;
+	e = make_e(*l); // указатель не нужен?
+
+	// Х побитово суммируется по модулю 2 с ключевым элементом ki.
+	QWORD h = e ^ k;
+
+	DWORD l_out = 0;
+	l_out = make_l(h);
+	return l_out;
+}	
+
 BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 {
 
@@ -1095,7 +1093,7 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		QWORD t_star_star = 0;
 		t_star_star = h;
 		t_star_star = t_star_star << 32;
-		QWORD l_tmp = 0;
+		l_tmp = 0;
 		l_tmp = l;
 		l_tmp = l_tmp << 4;
 		t_star_star = t_star_star | l_tmp;
