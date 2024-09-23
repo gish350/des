@@ -33,6 +33,11 @@ int main()
     
     std::string c_ecb = memToStr(hCipherText, newTextSize);
     std::cout << "\nDES-ECB: " << c_ecb << std::endl;
+
+    BYTE* hDeCipher = 0;
+    hDeCipher = ecb_decipher(hCipherText, newTextSize, key);
+    std::string decipher_ecb = memToStr(hDeCipher, newTextSize);
+    std::cout << "DES-ECB de-ciphered: " << decipher_ecb << std::endl;
     return 0;
 }
 

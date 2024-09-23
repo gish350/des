@@ -1041,6 +1041,7 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 	// Выработка ключевых элементов
 	make_k_keys(key);
 
+	// Зашифрование
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
 	int curBlock = 0;
 	int nBlocks = text_size / 64;
@@ -1048,7 +1049,7 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 	{
 		QWORD block_64 = *((QWORD*)plain_text + curBlock);
 
-		// Зашифрование
+		
 
 		// Шифрование 64-битового блока открытого текста T начинается с начальной перестановки битов IP. 
 		// В таблице указывается новое положение соответствующего бита.
@@ -1107,4 +1108,78 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 	}
 
 	return hCipherText;
+}
+
+BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
+{
+	key_correction(&key);
+
+	// Выработка ключевых элементов
+	make_k_keys(key);
+
+	BYTE* hDeCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
+	int curBlock = 0;
+	int nBlocks = text_size / 64;
+
+	while (curBlock != nBlocks - 1)
+	{
+		QWORD block_64 = *((QWORD*)cipher_text + curBlock);
+
+		// Дешифрование 64-битового блока текста C начинается с начальной перестановки битов IP. 
+		// В таблице указывается новое положение соответствующего бита.
+		// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
+		QWORD ip = 0;
+		ip = make_ip(&block_64);
+
+		// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
+		DWORD h = 0, l = 0;
+		split_ip(ip, &h, &l);
+
+		// с которыми выполняются 16 раундов преобразования(ячеек Фейстеля)
+		int j = 15;
+		DWORD l_tmp;
+		DWORD f_result;
+		QWORD k;
+		while (j > 0)
+		{
+			l_tmp = 0;
+			f_result = 0;
+			k = 0;
+
+			k = *((QWORD*)k_keys_buffer + j);
+			f_result = make_f(&l, k);
+			l_tmp = l;
+			l = h ^ f_result;
+			h = l_tmp;
+			j--;
+		}
+
+		// В последнем раунде происходит то же самое, за исключением обмена значениями половинок блока.
+		l_tmp = 0;
+		f_result = 0;
+		k = 0;
+
+		k = *((QWORD*)k_keys_buffer + curBlock);
+		f_result = make_f(&l, k);
+		l = h ^ f_result;
+
+		// Половинки H17 и L17 объединяются в полный блок Т**, 
+		QWORD t_star_star = 0;
+		t_star_star = h;
+		t_star_star = t_star_star << 32;
+		l_tmp = 0;
+		l_tmp = l;
+		l_tmp = l_tmp << 4;
+		t_star_star = t_star_star | l_tmp;
+
+		// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
+		QWORD c = 0;
+		c = make_ip1(&t_star_star);
+
+		memmove((QWORD*)hDeCipherText + curBlock, &c, 8);
+
+		curBlock++;
+	}
+
+	return hDeCipherText;
 }
