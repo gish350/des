@@ -1,6 +1,7 @@
-#include <windows.h>
-#include <winDNS.h>
-#include "common.h"
+#include "keys.h"
+
+
+extern BYTE* k_keys_buffer = nullptr;
 
 // Коррекция ключа: требуется, чтобы сумма битов каждого байта ключа, 
 // включая контрольный, была нечетной (нечетный паритетный бит).
@@ -195,7 +196,7 @@ void make_k_key(DWORD h, DWORD l, int k)
 	tmpBuffer = tmpBuffer | (hlUnion & 0x800000000) << 46 - 35;						  // 29
 	tmpBuffer = tmpBuffer | (hlUnion & 0x100000000) << 47 - 32;                       // 32
 
-	memmove(k_keys_buffer + k, (BYTE*)&tmpBuffer, k);
+	memmove(k_keys_buffer + k, (BYTE*)&tmpBuffer, 8); // размер - 6, но сделал 8 для удобства
 }
 
 
@@ -210,7 +211,7 @@ void make_k_keys(QWORD key)
 	split_pc1(&pc1, h, l);
 
 
-	// 48 * 16 / 8 = 96 байт (64 * 16 / 8 = 128)- суммарный размер блоков k1 
+	// 48 * 16 / 8 = 96 байт (64 * 16 / 8 = 128 для удобства)- суммарный размер блоков k1 
 	k_keys_buffer = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, 128);
 
 	int i = 0;

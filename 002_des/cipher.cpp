@@ -1,7 +1,4 @@
-#include <windows.h>
-#include <winDNS.h>
-#include "keys.h"
-#include "common.h"
+#include "cipher.h"
 
 
 
@@ -139,7 +136,7 @@ QWORD make_ip1(QWORD* block_64)
 	ip1 = ip1 | ((*block_64 & 0x20000000000000) >> 53 - 43);             // 11
 	ip1 = ip1 | ((*block_64 & 0x2000) <<44 - 13);					   // 51
 	ip1 = ip1 | ((*block_64 & 0x200000000000) >> 45 - 45);                 // 19
-	ip1 = ip1 | ((*block_64 & 0x20) << 46 - 45);						     // 59
+	ip1 = ip1 | ((*block_64 & 0x20) << 46 - 5);						     // 59
 	ip1 = ip1 | ((*block_64 & 0x2000000000) << 47 - 37);                   // 27
 
 	ip1 = ip1 | ((*block_64 & 0x40000000) << 48 - 30);                      // 34
@@ -1045,10 +1042,11 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 	make_k_keys(key);
 
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
-	int i = 0;
-	while (i != text_size - 1)
+	int curBlock = 0;
+	int nBlocks = text_size / 64;
+	while (curBlock != nBlocks - 1)
 	{
-		QWORD block_64 = *((QWORD*)plain_text + i);
+		QWORD block_64 = *((QWORD*)plain_text + curBlock);
 
 		// Зашифрование
 
@@ -1063,21 +1061,22 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		split_ip(ip, & h, & l);
 
 		// с которыми выполняются 16 раундов преобразования(ячеек Фейстеля)
-		int i = 0;
+		int j = 0;
 		DWORD l_tmp;
 		DWORD f_result;
 		QWORD k;
-		while (i < 16)
+		while (j < 16)
 		{
 			l_tmp = 0;
 			f_result = 0;
 			k = 0;
 
-			k = *((QWORD*)k_keys_buffer + i);
-			f_result = make_f(&l, k); // !проверить как ключевые элементы размещаются в памяти (+8)!
+			k = *((QWORD*)k_keys_buffer + j);
+			f_result = make_f(&l, k); 
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
+			j++;
 		}
 
 		// В последнем раунде происходит то же самое, за исключением обмена значениями половинок блока.
@@ -1085,8 +1084,8 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		f_result = 0;
 		k = 0;
 
-		k = *((QWORD*)k_keys_buffer + i);
-		f_result = make_f(&l, k); // !проверить как ключевые элементы размещаются в памяти (+8)!
+		k = *((QWORD*)k_keys_buffer + curBlock);
+		f_result = make_f(&l, k); 
 		l = h ^ f_result;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
@@ -1100,9 +1099,11 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 
 		// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
 		QWORD c = 0;
-		c = make_ip1(&t_star_star); // функция не протестирована
+		c = make_ip1(&t_star_star);
 
-		memmove(&c, hCipherText, 8);
+		memmove((QWORD*)hCipherText + curBlock, &c,  8);
+
+		curBlock++;
 	}
 
 	return hCipherText;
