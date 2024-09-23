@@ -24,8 +24,9 @@ int main()
 
     DWORD text_size = plain_text.length();
     DWORD newTextSize = TRUNC(text_size, 8); // выравнивание по 64 битным блокам
+    auto dataPtr = plain_text.data();
     BYTE* hPlainText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, newTextSize);
-    memmove(hPlainText, &plain_text, text_size);
+    memmove(hPlainText, dataPtr, text_size);
     BYTE* hCipherText = 0;
     hCipherText = ecb_cipher(hPlainText, newTextSize, key);
 
