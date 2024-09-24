@@ -1,4 +1,5 @@
 #include "keys.h"
+#include <cstdint>
 
 
 extern BYTE* k_keys_buffer = nullptr;
@@ -32,19 +33,71 @@ void key_correction(LPVOID key)
 	key = (BYTE*)key - 8; // возврат указател€ в начало
 }
 
+QWORD make_bit_permutation(QWORD* hSource, int perm_table[], int table_size)
+{
+	// ”становка бита в единицу
+	QWORD mask;
+
+	if (table_size == 56)
+	{
+		QWORD pc1_key = 0;
+		int bitPos;
+		int i = 0;
+		while (i < table_size)
+		{
+			mask = 0;
+			bitPos = perm_table[i] - 1;
+			// √енераци€ маски
+			// ¬ычисление количества бит, на которое нужно сместить влево, чтобы получить 1
+			int shiftCount = 63 - bitPos;
+			
+			mask |= (static_cast<QWORD>(1) << (63 - bitPos));
+			
+			// сместить вначало, прибавить кол-во зан€тых бит
+			int shift = 63 - shiftCount - i;
+			// ставим элемент на i-ю позицию
+			if (shift >= 0)
+				pc1_key = pc1_key | ((*hSource & mask) << shift);
+			else
+			{
+				shift = -shift;
+				pc1_key = pc1_key | ((*hSource & mask) >> shift);
+			}
+				
+			
+
+			i++;
+		}
+		return pc1_key;
+	}
+	return 0;
+}
+
 QWORD make_pc1(QWORD* hKey)
 {
 	QWORD pc1_key = 0;
-	pc1_key = pc1_key | ((*hKey & 0x80) >> 7);						// 57-й бит (56)
-	pc1_key = pc1_key | ((*hKey & 0x8000) >> 15 - 1);				// 49 (48)
-	pc1_key = pc1_key | ((*hKey & 0x800000) >> 23 - 2);				// 41
-	pc1_key = pc1_key | ((*hKey & 0x80000000) >> 31 - 3);			// 33
-	pc1_key = pc1_key | ((*hKey & 0x8000000000) >> 39 - 4);			// 25
-	pc1_key = pc1_key | ((*hKey & 0x800000000000) >> 47 - 5);		// 17
-	pc1_key = pc1_key | ((*hKey & 0x80000000000000) >> 55 - 6);		// 9
+	int pc1_table[] = {57,	49,	41,	33,	25,	17,	9,
+						1,	58,	50,	42,	34,	26,	18,
+						10,	2,	59,	51,	43,	35,	27,
+						19,	11,	3,	60,	52,	44,	36,
+						63,	55,	47,	39,	31,	23,	15,
+						7,	62,	54,	46,	38,	30,	22,
+						14,	6,	61,	53,	45,	37,	29,
+						21,	13,	5,	28,	20,	12,	4 };
 
-	pc1_key = pc1_key | ((*hKey & 0x8000000000000000) >> 63 - 7);	// 1
-	pc1_key = pc1_key | ((*hKey & 0x40) << 2);						// 58
+	pc1_key = make_bit_permutation(hKey, pc1_table, 56);
+
+	
+	pc1_key = pc1_key | ((*hKey & 0x80) << 63 - 7);						// 57-й бит (56)
+	pc1_key = pc1_key | ((*hKey & 0x8000) << 63 - 15 - 1);				// 49 (48)
+	pc1_key = pc1_key | ((*hKey & 0x800000) << 63 - 23 - 2);				// 41
+	pc1_key = pc1_key | ((*hKey & 0x80000000) << 63 - 31 - 3);			// 33
+	pc1_key = pc1_key | ((*hKey & 0x8000000000) << 63 - 39 - 4);			// 25
+	pc1_key = pc1_key | ((*hKey & 0x800000000000) << 63 - 47 - 5);		// 17
+	pc1_key = pc1_key | ((*hKey & 0x80000000000000) << 63 - 55 - 6);		// 9
+									
+	pc1_key = pc1_key | ((*hKey & 0x8000000000000000) << 63 - 7);	// 1
+	pc1_key = pc1_key | ((*hKey & 0x40) << 63 - 2 - 8);						// 58
 	pc1_key = pc1_key | ((*hKey & 0x4000) >> 14 - 9);				// 50
 	pc1_key = pc1_key | ((*hKey & 0x400000) >> 22 - 10);			// 42
 	pc1_key = pc1_key | ((*hKey & 0x40000000) >> 30 - 11);			// 34
@@ -98,6 +151,7 @@ QWORD make_pc1(QWORD* hKey)
 	pc1_key = pc1_key | ((*hKey & 0x100000000000) << 53 - 44);			// 20
 	pc1_key = pc1_key | ((*hKey & 0x10000000000000) << 54 - 52);			// 12
 	pc1_key = pc1_key | ((*hKey & 0x1000000000000000) >> 60 - 55);		// 4	
+	pc1_key = ~pc1_key;
 	return pc1_key;
 }
 
@@ -218,7 +272,7 @@ void make_k_keys(QWORD key)
 	int k = 0;
 	//16 раз выполн€етс€ процедура.
 	while (i < 16)
-	{	
+	{
 		// ¬ зависимости от номера итерации обе половинки циклически сдвигаютс€ на 1 или 2 бита влево.
 		make_shift(&h, &l, i);
 		// ѕосле сдвига половинки объедин€ютс€ и из них с помощью выборки-перестановки PC2 отбираютс€ 48 битов, 
