@@ -33,16 +33,17 @@ void key_correction(LPVOID key)
 	key = (BYTE*)key - 8; // возврат указателя в начало
 }
 
-QWORD make_bit_permutation(QWORD* hSource, int perm_table[], int table_size)
+QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
 {
-	// Установка бита в единицу
+	LPVOID handle;
 	QWORD mask;
-
-	if (table_size == 56 || table_size == 48)
+	QWORD result = 0;
+	int bitPos;
+	int i = 0;
+	if (table_size == 56 || table_size == 48 || table_size == 64)
 	{
-		QWORD pc1_key = 0;
-		int bitPos;
-		int i = 0;
+		QWORD* qwordHandle = (QWORD*)hSource;
+
 		while (i < table_size)
 		{
 			mask = 0;
@@ -50,27 +51,53 @@ QWORD make_bit_permutation(QWORD* hSource, int perm_table[], int table_size)
 			// Генерация маски
 			// Вычисление количества бит, на которое нужно сместить влево, чтобы получить 1
 			int shiftCount = 63 - bitPos;
-			
+
 			mask |= (static_cast<QWORD>(1) << (63 - bitPos));
-			
+
 			// сместить вначало, прибавить кол-во занятых бит
 			int shift = 63 - shiftCount - i;
 			// ставим элемент на i-ю позицию
 			if (shift >= 0)
-				pc1_key = pc1_key | ((*hSource & mask) << shift);
+				result = result | ((*qwordHandle & mask) << shift);
 			else
 			{
 				shift = -shift;
-				pc1_key = pc1_key | ((*hSource & mask) >> shift);
+				result = result | ((*qwordHandle & mask) >> shift);
 			}
-				
-			
 
 			i++;
 		}
-		return pc1_key;
 	}
-	return 0;
+	else if (table_size == 32)
+	{
+		DWORD* qwordHandle = (DWORD*)hSource;
+
+		while (i < table_size)
+		{
+			mask = 0;
+			bitPos = perm_table[i] - 1;
+			// Генерация маски
+			// Вычисление количества бит, на которое нужно сместить влево, чтобы получить 1
+			int shiftCount = 31 - bitPos;
+
+			mask |= (static_cast<QWORD>(1) << (31 - bitPos));
+
+			// сместить вначало, прибавить кол-во занятых бит
+			int shift = 31 - shiftCount - i;
+			// ставим элемент на i-ю позицию
+			if (shift >= 0)
+				result = result | ((*qwordHandle & mask) << shift);
+			else
+			{
+				shift = -shift;
+				result = result | ((*qwordHandle & mask) >> shift);
+			}
+
+			i++;
+		}
+	}
+	
+	return result;
 }
 
 QWORD make_pc1(QWORD* hKey)
