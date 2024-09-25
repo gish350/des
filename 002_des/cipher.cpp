@@ -1051,12 +1051,12 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 			k = 0;
 
 			k = *(((QWORD*)k_keys_buffer + j));
-			std::cout << std::endl << "before iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+			std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k); 
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
-			std::cout << "after iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+			std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			j++;
 		}
 		
@@ -1064,22 +1064,22 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		l_tmp = 0;
 		f_result = 0;
 		k = 0;
-		j++;
 
 		k = *((QWORD*)k_keys_buffer + j);
+		std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 		f_result = make_f(l, k); 
 		h = h ^ f_result;
-		std::cout << std::endl << "iteration: " << 15 << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+		std::cout  << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k <<  " f_result: " << f_result <<std::endl;
 		std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
 		QWORD t_star_star = 0;
 		t_star_star = h;
 		t_star_star = t_star_star << 32;
-		l_tmp = 0;
-		l_tmp = l;
-		l_tmp = l_tmp << 4;
-		t_star_star = t_star_star | l_tmp;
+		QWORD l_tmp2 = 0;
+		l_tmp2 = l;
+		l_tmp2 = l_tmp2;
+		t_star_star = t_star_star | l_tmp2;
 
 		// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
 		QWORD c = 0;
@@ -1137,12 +1137,12 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 			k = 0;
 
 			k = *(((QWORD*)k_keys_buffer + j));
-			std::cout << std::endl << "before iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+			std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k);
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
-			std::cout << "after iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+			std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			j--;
 		}
 		
@@ -1151,13 +1151,13 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		l_tmp = 0;
 		f_result = 0;
 		k = 0;
-		j--;
+
 
 		k = *((QWORD*)k_keys_buffer + j);
-		std::cout << std::endl << "before iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+		std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 		f_result = make_f(l, k);
 		h = h ^ f_result;
-		std::cout << std::endl << "after iteration: " << 0 << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+		std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 		std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
