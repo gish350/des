@@ -1051,11 +1051,12 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 			k = 0;
 
 			k = *(((QWORD*)k_keys_buffer + j));
+			std::cout << std::endl << "before iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 			f_result = make_f(l, k); 
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
-			std::cout << std::endl << "iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+			std::cout << "after iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 			j++;
 		}
 		
@@ -1063,11 +1064,12 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		l_tmp = 0;
 		f_result = 0;
 		k = 0;
+		j++;
 
-		k = *((QWORD*)k_keys_buffer + curBlock);
+		k = *((QWORD*)k_keys_buffer + j);
 		f_result = make_f(l, k); 
 		h = h ^ f_result;
-		std::cout << std::endl << "iteration: " << 16 << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+		std::cout << std::endl << "iteration: " << 15 << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 		std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
@@ -1128,18 +1130,19 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		DWORD f_result;
 		QWORD k;
 		std::cout << std::endl << "=FEISTEL=" << std::endl;
-		while (j > -1)
+		while (j > 0)
 		{
 			l_tmp = 0;
 			f_result = 0;
 			k = 0;
 
 			k = *(((QWORD*)k_keys_buffer + j));
+			std::cout << std::endl << "before iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 			f_result = make_f(l, k);
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
-			std::cout << std::endl << "iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+			std::cout << "after iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 			j--;
 		}
 		
@@ -1148,11 +1151,13 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		l_tmp = 0;
 		f_result = 0;
 		k = 0;
+		j--;
 
-		k = *((QWORD*)k_keys_buffer + curBlock);
+		k = *((QWORD*)k_keys_buffer + j);
+		std::cout << std::endl << "before iteration: " << j << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 		f_result = make_f(l, k);
 		h = h ^ f_result;
-		std::cout << std::endl << "iteration: " << 0 << "  l: " << l << " h: " << h << " k: " << k << std::endl;
+		std::cout << std::endl << "after iteration: " << 0 << "  l: " << l << " h: " << h << " k: " << k << std::endl;
 		std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
