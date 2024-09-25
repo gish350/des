@@ -1,6 +1,6 @@
 #include "keys.h"
 #include <cstdint>
-
+#include <iostream> // убрать
 
 extern BYTE* k_keys_buffer = nullptr;
 
@@ -8,6 +8,8 @@ extern BYTE* k_keys_buffer = nullptr;
 // включая контрольный, была нечетной (нечетный паритетный бит).
 void key_correction(LPVOID key)
 {
+	
+
 	BYTE* base = (BYTE*)key;
 
 	while ((BYTE*)key - (BYTE*)base != 7)
