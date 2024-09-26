@@ -1167,7 +1167,7 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		t_star_star = t_star_star << 32;
 		l_tmp = 0;
 		l_tmp = l;
-		l_tmp = l_tmp << 4;
+		/*l_tmp = l_tmp << 4;*/
 		t_star_star = t_star_star | l_tmp;
 
 		// в котором выполн€етс€ конечна€ битова€ перестановка IPЦ1 по аналогии с начальной.
