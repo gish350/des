@@ -34,78 +34,6 @@ QWORD make_ip1(QWORD* block_64)
 		33, 1, 41, 9, 49, 17, 57, 25
 	};
 	ip1 = make_bit_permutation(block_64, ip_table, 64, 64);
-	//ip1 = ip1 | ((*block_64 & 0x1000000) >> 24 - 0);						// 40
-	//ip1 = ip1 | ((*block_64 & 0x100000000000000) >> 56 - 1);				// 8
-	//ip1 = ip1 | ((*block_64 & 0x10000) >> 16 - 2);						 // 48
-	//ip1 = ip1 | ((*block_64 & 0x1000000000000) >> 48 - 3);                 // 16
-	//ip1 = ip1 | ((*block_64 & 0x100) >> 8 - 4);							 // 56
-	//ip1 = ip1 | ((*block_64 & 0x10000000000) >> 40 - 5);                   // 24
-	//ip1 = ip1 | ((*block_64 & 0x1) << 6 - 0);								 // 64
-	//ip1 = ip1 | ((*block_64 & 0x100000000) >> 32 - 7);                     // 32
-
-	//ip1 = ip1 | ((*block_64 & 0x2000000) >> 25 - 8);						 // 39
-	//ip1 = ip1 | ((*block_64 & 0x200000000000000) >> 57 - 9);               // 7
-	//ip1 = ip1 | ((*block_64 & 0x20000) >> 17 - 10);						 // 47
-	//ip1 = ip1 | ((*block_64 & 0x2000000000000) >> 49 - 11);                // 15
-	//ip1 = ip1 | ((*block_64 & 0x200) <<12 -9 );							 // 55
-	//ip1 = ip1 | ((*block_64 & 0x20000000000) >> 41 - 13);                  // 23
-	//ip1 = ip1 | ((*block_64 & 0x2) << 14 - 1);							 // 63
-	//ip1 = ip1 | ((*block_64 & 0x200000000) >> 33 - 15);                    // 31
-
-	//ip1 = ip1 | ((*block_64 & 0x4000000) >> 26 - 16);				         // 38
-	//ip1 = ip1 | ((*block_64 & 0x400000000000000) >> 58 - 17);	           // 6
-	//ip1 = ip1 | ((*block_64 & 0x40000) >> 18 - 18);				         // 46
-	//ip1 = ip1 | ((*block_64 & 0x4000000000000) >> 50 - 19);                  // 14
-	//ip1 = ip1 | ((*block_64 & 0x400) << 20 -10 );						     // 54
-	//ip1 = ip1 | ((*block_64 & 0x40000000000) >> 42 - 21);                  // 22
-	//ip1 = ip1 | ((*block_64 & 0x4) << 22 - 2);						     // 62
-	//ip1 = ip1 | ((*block_64 & 0x400000000) >> 34 - 23);                    // 30
-
-	//ip1 = ip1 | ((*block_64 & 0x8000000) >> 27 - 24);                      // 37
-	//ip1 = ip1 | ((*block_64 & 0x800000000000000) >> 59 - 25);                 // 5
-	//ip1 = ip1 | ((*block_64 & 0x80000) << 26 - 19);					     // 45
-	//ip1 = ip1 | ((*block_64 & 0x8000000000000) >> 51 - 27);                   // 13
-	//ip1 = ip1 | ((*block_64 & 0x800) << 28 - 11);							 // 53
-	//ip1 = ip1 | ((*block_64 & 0x80000000000) >> 43 - 29);                  // 21
-	//ip1 = ip1 | ((*block_64 & 0x8) << 30 - 3);							 // 61
-	//ip1 = ip1 | ((*block_64 & 0x800000000) >> 35 - 31);                    // 29
-
-	//ip1 = ip1 | ((*block_64 & 0x10000000) <<32 - 28);                     // 36
-	//ip1 = ip1 | ((*block_64 & 0x1000000000000000) >> 60 - 33);             // 4
-	//ip1 = ip1 | ((*block_64 & 0x100000) << 34 - 20);				         // 44
-	//ip1 = ip1 | ((*block_64 & 0x10000000000000) >> 52 - 35);                 // 12
-	//ip1 = ip1 | ((*block_64 & 0x1000) << 36 - 12);					     // 52
-	//ip1 = ip1 | ((*block_64 & 0x100000000000) >> 44 - 37);                 // 20
-	//ip1 = ip1 | ((*block_64 & 0x10) << 38 - 4);						     // 60
-	//ip1 = ip1 | ((*block_64 & 0x1000000000) << 39 - 36);                   // 28
-
-	//ip1 = ip1 | ((*block_64 & 0x20000000) << 40 - 29);                     // 35
-	//ip1 = ip1 | ((*block_64 & 0x2000000000000000) >> 61 - 41);            // 3
-	//ip1 = ip1 | ((*block_64 & 0x200000) <<42 -  21);					     // 43
-	//ip1 = ip1 | ((*block_64 & 0x20000000000000) >> 53 - 43);             // 11
-	//ip1 = ip1 | ((*block_64 & 0x2000) <<44 - 13);					   // 51
-	//ip1 = ip1 | ((*block_64 & 0x200000000000) >> 45 - 45);                 // 19
-	//ip1 = ip1 | ((*block_64 & 0x20) << 46 - 5);						     // 59
-	//ip1 = ip1 | ((*block_64 & 0x2000000000) << 47 - 37);                   // 27
-
-	//ip1 = ip1 | ((*block_64 & 0x40000000) << 48 - 30);                      // 34
-	//ip1 = ip1 | ((*block_64 & 0x4000000000000000) >> 62 - 49);               // 2
-	//ip1 = ip1 | ((*block_64 & 0x400000) << 50 - 22);				        // 42
-	//ip1 = ip1 | ((*block_64 & 0x40000000000000) >> 54 - 51);                  // 10
-	//ip1 = ip1 | ((*block_64 & 0x4000) << 52 - 14);					     // 50
-	//ip1 = ip1 | ((*block_64 & 0x400000000000) << 53 - 46);                 // 18
-	//ip1 = ip1 | ((*block_64 & 0x40) <<54 - 6);						     // 58
-	//ip1 = ip1 | ((*block_64 & 0x4000000000) << 55 -38);                   // 26
-
-	//ip1 = ip1 | ((*block_64 & 0x80000000) <<56 - 31);                     // 33
-	//ip1 = ip1 | ((*block_64 & 0x8000000000000000) >> 63 - 57);               // 1
-	//ip1 = ip1 | ((*block_64 & 0x800000) << 58 - 23);				         // 41
-	//ip1 = ip1 | ((*block_64 & 0x80000000000000) << 59 - 55);                 // 9
-	//ip1 = ip1 | ((*block_64 & 0x8000) << 60 - 15);						 // 49
-	//ip1 = ip1 | ((*block_64 & 0x800000000000) <<  61 - 47);                 // 17
-	//ip1 = ip1 | ((*block_64 & 0x80) << 62 - 7);							 // 57
-	//ip1 = ip1 | ((*block_64 & 0x8000000000) << 63 - 39);                      // 25
-
 	return ip1;
 }
 
@@ -146,59 +74,7 @@ QWORD make_e(DWORD l)
 		24,  25,  26,  27,  28,  29,
 		28,  29,  30,  31,  32,  1
 	};
-	e = make_bit_permutation(&l, e_block, 32, 48);
-
-	//e = e | ((tmp_l & 0x40) >> 6 - 0);											  // 58
-
-	//e = e | ((tmp_l & 0x100000000) >> 32 - 0);										 //32
-	//e = e | ((tmp_l & 0x8000000000000000) >> 63 - 1);                               //1
-	//e = e | ((tmp_l & 0x4000000000000000) >> 62 - 2);                               //2
-	//e = e | ((tmp_l & 0x2000000000000000) >> 61 - 3);                               //3
-	//e = e | ((tmp_l & 0x1000000000000000) >> 60 - 4);                               //4
-	//e = e | ((tmp_l & 0x800000000000000) >> 59 - 5);                                //5
-	//e = e | ((tmp_l & 0x1000000000000000) >> 60 - 6);                               //4
-	//e = e | ((tmp_l & 0x800000000000000) >> 59 - 7);                                //5
-	//e = e | ((tmp_l & 0x400000000000000) >> 58 - 8);                                //6
-	//e = e | ((tmp_l & 0x200000000000000) >> 57 - 9);                                //7
-	//e = e | ((tmp_l & 0x100000000000000) >> 56 - 10);                               //8
-	//e = e | ((tmp_l & 0x80000000000000) >> 55 - 11);                                //9
-	//e = e | ((tmp_l & 0x100000000000000) >> 56 - 12);                               //8
-	//e = e | ((tmp_l & 0x80000000000000) >> 55 - 13);                                //9
-	//e = e | ((tmp_l & 0x40000000000000) >> 54 - 14);                                //10
-	//e = e | ((tmp_l & 0x20000000000000) >> 53 - 15);                                //11
-	//e = e | ((tmp_l & 0x10000000000000) >> 52 - 16);                                //12
-	//e = e | ((tmp_l & 0x8000000000000) >> 51 - 17);									//13
-	//e = e | ((tmp_l & 0x10000000000000) >> 52 - 18);                                //12
-	//e = e | ((tmp_l & 0x8000000000000) >> 51 - 19);									  //13
-	//e = e | ((tmp_l & 0x4000000000000) >> 50 - 20);									 //14
-	//e = e | ((tmp_l & 0x2000000000000) >> 49 - 21);									 //15
-	//e = e | ((tmp_l & 0x1000000000000) >> 48 - 22);									  //16
-	//e = e | ((tmp_l & 0x800000000000) >> 47 - 23);									  //17
-	//e = e | ((tmp_l & 0x1000000000000) >> 48 - 24);									   //16
-	//e = e | ((tmp_l & 0x800000000000) >> 47 - 25);								   //17
-	//e = e | ((tmp_l & 0x400000000000) >> 46 - 26);                          //18
-	//e = e | ((tmp_l & 0x200000000000) >> 45 - 27);                          //19
-	//e = e | ((tmp_l & 0x100000000000) >> 44 - 28);                          //20
-	//e = e | ((tmp_l & 0x80000000000) >> 43 - 29);                           //21
-	//e = e | ((tmp_l & 0x100000000000) >> 44 - 30);                          //20
-	//e = e | ((tmp_l & 0x80000000000) >> 43 - 31);                           //21
-	//e = e | ((tmp_l & 0x40000000000) >> 42 - 32);                           //22
-	//e = e | ((tmp_l & 0x20000000000) >> 41 - 33);                           //23
-	//e = e | ((tmp_l & 0x10000000000) >> 40 - 34);                           //24
-	//e = e | ((tmp_l & 0x8000000000) >> 39 - 35);                            //25
-	//e = e | ((tmp_l & 0x10000000000) >> 40 - 36);                           //24
-	//e = e | ((tmp_l & 0x8000000000) >> 39 - 37);                            //25
-	//e = e | ((tmp_l & 0x4000000000) >> 38 - 38);                            //26
-	//e = e | ((tmp_l & 0x2000000000) << 39 - 37);                            //27
-	//e = e | ((tmp_l & 0x1000000000) << 40 - 36);                            //28
-	//e = e | ((tmp_l & 0x800000000) << 41 - 35);                             //29
-	//e = e | ((tmp_l & 0x1000000000) << 42 - 36);                            //28
-	//e = e | ((tmp_l & 0x800000000) << 43 - 35);                             //29
-	//e = e | ((tmp_l & 0x400000000) << 44 - 34);                             //30
-	//e = e | ((tmp_l & 0x200000000) << 45 - 33);                             //31
-	//e = e | ((tmp_l & 0x100000000) << 46 - 32);                             //32
-	//e = e | ((tmp_l & 0x8000000000000000) >> 63 - 47);                              //1
-	
+	e = make_bit_permutation(&l, e_block, 32, 48);	
 	return e;
 }
 
@@ -862,42 +738,6 @@ DWORD make_p(DWORD h_dash)
 		19, 13, 30, 6, 22, 11, 4, 25,
 	};
 	p = make_bit_permutation(&h_dash, p_block, 32, 32);
-	//p = p | ((h_dash & 0x10000) >> (16 - 0));                       // 16
-	//p = p | ((h_dash & 0x2000000) >> (25 - 1));                     // 7
-	//p = p | ((h_dash & 0x1000) >> (12 - 2));                        // 20
-	//p = p | ((h_dash & 0x800) >> (11 - 3));							// 21
-	//p = p | ((h_dash & 0x8) << (4 - 3));						    // 29
-	//p = p | ((h_dash & 0x100000) >> (20 - 5));                      // 12
-	//p = p | ((h_dash & 0x10) << (6 - 4));						   // 28
-	//p = p | ((h_dash & 0x8000) >> (15 - 7));                        // 17
-
-	//p = p | ((h_dash & 0x80000000) >> (31 - 8));                    // 1
-	//p = p | ((h_dash & 0x20000) >> (17 - 9));                       // 15
-	//p = p | ((h_dash & 0x200) << (10 - 9));						   // 23
-	//p = p | ((h_dash & 0x40) << (11 - 6));						   // 26
-	//p = p | ((h_dash & 0x8000000) >> (27 - 12));                    // 5
-	//p = p | ((h_dash & 0x4000) >> (14 - 13));                       // 18
-	//p = p | ((h_dash & 0x2) << (14 - 1));						   // 31
-	//p = p | ((h_dash & 0x400000) >> (22 - 15));                     // 10
-
-	//p = p | ((h_dash & 0x40000000) >> (30 - 16));                   // 2
-	//p = p | ((h_dash & 0x1000000) >> (24 - 17));                    // 8
-	//p = p | ((h_dash & 0x100) << (18 - 8));							// 24
-	//p = p | ((h_dash & 0x40000) << (19 - 18));                      // 14
-	//p = p | ((h_dash & 0x1) << (20));							// 32
-	//p = p | ((h_dash & 0x20) << (21 - 5));						  // 27
-	//p = p | ((h_dash & 0x20000000) >> (29 - 22));                   // 3
-	//p = p | ((h_dash & 0x800000) >> (23 - 23));                     // 9
-
-	//p = p | ((h_dash & 0x2000) << (24 - 13));                       // 19
-	//p = p | ((h_dash & 0x80000) << (25 - 19));                      // 13
-	//p = p | ((h_dash & 0x4) << (26 - 2));							 // 30
-	//p = p | ((h_dash & 0x4000000) << (27 - 26));                    // 6
-	//p = p | ((h_dash & 0x400) << (28 - 10));                        // 22
-	//p = p | ((h_dash & 0x200000) << (29 - 21));                     // 11
-	//p = p | ((h_dash & 0x10000000) << (30 - 28));                   // 4
-	//p = p | ((h_dash & 0x80) << (31 - 7));						  // 25
-
 	return p;
 }
 
@@ -979,7 +819,7 @@ DWORD make_f(DWORD l, QWORD k)
 	// Каждая тетрада по циклическому закону дополняется крайними битами из соседних тетрад до 6-битового фрагмента (функция расширения Е)
 	QWORD e = 0;
 	e = make_e(l); 
-	std::cout << "e: " << e << std::endl;
+	//std::cout << "e: " << e << std::endl;
 	// Х побитово суммируется по модулю 2 с ключевым элементом ki.
 	QWORD h = e ^ k;
 
@@ -1006,35 +846,35 @@ QWORD swap_qword_bytes(QWORD qword) {
 
 BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 {
-	std::cout << std::endl << "==========CIPHERING STARTS===========" << std::endl;
+	//std::cout << std::endl << "==========CIPHERING STARTS===========" << std::endl;
 
-	std::cout << "key before correction: " << std::hex << key << std::endl;
+	//std::cout << "key before correction: " << std::hex << key << std::endl;
 	key_correction(&key); 
-	std::cout << "key after correction: " << std::hex << key << std::endl;
+	//std::cout << "key after correction: " << std::hex << key << std::endl;
 
 	// Выработка ключевых элементов
-	std::cout << std::endl << "==========KEYS GENERATION STARTS===========" << std::endl;
+	//std::cout << std::endl << "==========KEYS GENERATION STARTS===========" << std::endl;
 	make_k_keys(key);
-	std::cout << std::endl << "==========KEY GENERATION ENDS===========" << std::endl;
+	//std::cout << std::endl << "==========KEY GENERATION ENDS===========" << std::endl;
 	// Зашифрование
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
 	int curBlock = 0;
-	int nBlocks = text_size / 64;
+	int nBlocks = text_size / 8;
 
-	//while (curBlock != nBlocks - 1)
-	while (curBlock != 1)
+	while (curBlock < nBlocks)
+	//while (curBlock != 1)
 	{
-		std::cout << std::endl << "====BLOCK: " << std::dec << curBlock << " ====" << std::endl;
+		//std::cout << std::endl << "====BLOCK: " << std::dec << curBlock << " ====" << std::endl;
 		QWORD block_64 = 0;
 		block_64 = *((QWORD*)plain_text + curBlock);
-		std::cout << "block: " << block_64 << std::endl;
+		//std::cout << "block: " << block_64 << std::endl;
 
 		// Шифрование 64-битового блока открытого текста T начинается с начальной перестановки битов IP. 
 		// В таблице указывается новое положение соответствующего бита.
 		// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
 		QWORD t_star = 0;
 		t_star = make_ip(&block_64);
-		std::cout << "T*: " << std::hex << t_star << std::endl;
+		//std::cout << "T*: " << std::hex << t_star << std::endl;
 		// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
 		DWORD h = 0, l = 0;
 		split_ip(t_star, & h, & l);
@@ -1044,7 +884,7 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		DWORD l_tmp;
 		DWORD f_result;
 		QWORD k;
-		std::cout << std::endl << "=FEISTEL=" << std::endl;
+		//std::cout << std::endl << "=FEISTEL=" << std::endl;
 		while (j < 15)
 		{
 			l_tmp = 0;
@@ -1052,12 +892,12 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 			k = 0;
 
 			k = *(((QWORD*)k_keys_buffer + j));
-			std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+			//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k); 
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
-			std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+			//std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			j++;
 		}
 		
@@ -1067,11 +907,11 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		k = 0;
 
 		k = *((QWORD*)k_keys_buffer + j);
-		std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+		//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 		f_result = make_f(l, k); 
 		h = h ^ f_result;
-		std::cout  << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k <<  " f_result: " << f_result <<std::endl;
-		std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
+		//std::cout  << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k <<  " f_result: " << f_result <<std::endl;
+		//std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
 		QWORD t_star_star = 0;
@@ -1084,43 +924,43 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 
 		// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
 		QWORD c = 0;
-		std::cout << "T**: " << std::hex << t_star_star << std::endl;
+		//std::cout << "T**: " << std::hex << t_star_star << std::endl;
 		c = make_ip1(&t_star_star);
-		std::cout << "after IP-1: " << std::hex << c << std::endl;
+		//std::cout << "after IP-1: " << std::hex << c << std::endl;
 		memmove((QWORD*)hCipherText + curBlock, &c,  8);
 
 		curBlock++;
 	}
-	std::cout << std::endl << "==========CIPHERING ENDS===========" << std::endl;
+	//std::cout << std::endl << "==========CIPHERING ENDS===========" << std::endl;
 	return hCipherText;
 }
 
 BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 {
-	std::cout << std::endl << "==========DECIPHERING STARTS===========" << std::endl;
+	//std::cout << std::endl << "==========DECIPHERING STARTS===========" << std::endl;
 
-	std::cout << "key before correction: " << std::hex << key << std::endl;
+	//std::cout << "key before correction: " << std::hex << key << std::endl;
 	key_correction(&key);
-	std::cout << "key after correction: " << std::hex << key << std::endl;
+	//std::cout << "key after correction: " << std::hex << key << std::endl;
 	// Выработка ключевых элементов
 	make_k_keys(key);
 
 	BYTE* hDeCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
 	int curBlock = 0;
-	int nBlocks = text_size / 64;
+	int nBlocks = text_size / 8;
 
-	//while (curBlock != nBlocks - 1)
-	while (curBlock != 1)
+	while (curBlock < nBlocks)
+	//while (curBlock != 1)
 	{
-		std::cout << std::endl << "====BLOCK: " << std::dec <<curBlock << " ====" << std::endl;
+		//std::cout << std::endl << "====BLOCK: " << std::dec <<curBlock << " ====" << std::endl;
 		QWORD block_64 = *((QWORD*)cipher_text + curBlock);
-		std::cout << "block: " << curBlock << " " << std::hex << block_64 << std::endl;
+		//std::cout << "block: " << curBlock << " " << std::hex << block_64 << std::endl;
 		// Дешифрование 64-битового блока текста C начинается с начальной перестановки битов IP. 
 		// В таблице указывается новое положение соответствующего бита.
 		// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
 		QWORD t_star = 0;
 		t_star = make_ip(&block_64);
-		std::cout << "T*: " << std::hex << t_star << std::endl;
+		//std::cout << "T*: " << std::hex << t_star << std::endl;
 		// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
 		DWORD h = 0, l = 0;
 		split_ip(t_star, &h, &l);
@@ -1130,7 +970,7 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		DWORD l_tmp;
 		DWORD f_result;
 		QWORD k;
-		std::cout << std::endl << "=FEISTEL=" << std::endl;
+		//std::cout << std::endl << "=FEISTEL=" << std::endl;
 		while (j > 0)
 		{
 			l_tmp = 0;
@@ -1138,12 +978,12 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 			k = 0;
 
 			k = *(((QWORD*)k_keys_buffer + j));
-			std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+			//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k);
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
-			std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+			//std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			j--;
 		}
 		
@@ -1155,11 +995,11 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 
 
 		k = *((QWORD*)k_keys_buffer + j);
-		std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+		//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 		f_result = make_f(l, k);
 		h = h ^ f_result;
-		std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
-		std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
+		//std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+		//std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
 		QWORD t_star_star = 0;
@@ -1172,13 +1012,13 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 
 		// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
 		QWORD c = 0;
-		std::cout << "T**: " << std::hex << t_star_star << std::endl;
+		//std::cout << "T**: " << std::hex << t_star_star << std::endl;
 		c = make_ip1(&t_star_star);
-		std::cout << "IP-1: " << std::hex << c << std::endl;
+		//std::cout << "IP-1: " << std::hex << c << std::endl;
 		memmove((QWORD*)hDeCipherText + curBlock, &c, 8);
 
 		curBlock++;
 	}
-	std::cout << std::endl << "==========DECIPHERING ENDS===========" << std::endl;
+	//std::cout << std::endl << "==========DECIPHERING ENDS===========" << std::endl;
 	return hDeCipherText;
 }
