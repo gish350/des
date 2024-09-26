@@ -177,7 +177,7 @@ void make_k_key(DWORD h, DWORD l, int k)
 		46,	42,	50,	36,	29,	32
 	};
 	tmpBuffer = make_bit_permutation(&hlUnion, pc2_table, 56, 48);
-
+	std::cout << "KEY K" <<k / 8 << ": " << tmpBuffer << std::endl;
 	memmove(k_keys_buffer + k, (BYTE*)&tmpBuffer, 8); // размер - 6, но сделал 8 для удобства
 }
 

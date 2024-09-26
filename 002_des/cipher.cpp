@@ -846,21 +846,20 @@ QWORD swap_qword_bytes(QWORD qword) {
 
 BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 {
-	//std::cout << std::endl << "==========CIPHERING STARTS===========" << std::endl;
+	std::cout << std::endl << "==========CIPHERING STARTS===========" << std::endl;
 
-	//std::cout << "key before correction: " << std::hex << key << std::endl;
+	std::cout << "key before correction: " << std::hex << key << std::endl;
 	key_correction(&key); 
-	//std::cout << "key after correction: " << std::hex << key << std::endl;
+	std::cout << "key after correction: " << std::hex << key << std::endl;
 
 	// Выработка ключевых элементов
-	//std::cout << std::endl << "==========KEYS GENERATION STARTS===========" << std::endl;
+	std::cout << std::endl << "==========KEYS GENERATION STARTS===========" << std::endl;
 	make_k_keys(key);
-	//std::cout << std::endl << "==========KEY GENERATION ENDS===========" << std::endl;
+	std::cout << std::endl << "==========KEY GENERATION ENDS===========" << std::endl;
 	// Зашифрование
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
 	int curBlock = 0;
 	int nBlocks = text_size / 8;
-
 	while (curBlock < nBlocks)
 	//while (curBlock != 1)
 	{
@@ -874,6 +873,8 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
 		QWORD t_star = 0;
 		t_star = make_ip(&block_64);
+		if (curBlock == 0)
+			std::cout << std::endl << "IP: " << t_star << std::endl;
 		//std::cout << "T*: " << std::hex << t_star << std::endl;
 		// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
 		DWORD h = 0, l = 0;
@@ -884,7 +885,9 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		DWORD l_tmp;
 		DWORD f_result;
 		QWORD k;
-		//std::cout << std::endl << "=FEISTEL=" << std::endl;
+		if (curBlock ==0)
+			std::cout << std::endl << "==========FEISTEL LOOP STARTS===========" << std::endl;
+			std::cout << "==========only first iteration===========" << std::endl;
 		while (j < 15)
 		{
 			l_tmp = 0;
@@ -894,6 +897,8 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 			k = *(((QWORD*)k_keys_buffer + j));
 			//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k); 
+			if (curBlock == 0)
+				std::cout << std::endl << "H" << j << ": " << h << "	L" << j << ": " << l << std::endl;
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
@@ -908,11 +913,14 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 
 		k = *((QWORD*)k_keys_buffer + j);
 		//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
+		if (curBlock == 0)
+			std::cout << std::endl << "H" <<j << ": " <<h << "	L" << j <<": " << l << std::endl;
 		f_result = make_f(l, k); 
 		h = h ^ f_result;
 		//std::cout  << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k <<  " f_result: " << f_result <<std::endl;
 		//std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
-
+		if (curBlock == 0)
+			std::cout << std::endl << "==========FEISTEL LOOP ENDS===========" << std::endl;
 		// Половинки H17 и L17 объединяются в полный блок Т**, 
 		QWORD t_star_star = 0;
 		t_star_star = h;
@@ -926,7 +934,8 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		QWORD c = 0;
 		//std::cout << "T**: " << std::hex << t_star_star << std::endl;
 		c = make_ip1(&t_star_star);
-		//std::cout << "after IP-1: " << std::hex << c << std::endl;
+		if (curBlock == 0)
+			std::cout << std::endl << "IP-1: " << c << std::endl;
 		memmove((QWORD*)hCipherText + curBlock, &c,  8);
 
 		curBlock++;
