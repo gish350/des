@@ -16,7 +16,7 @@ QWORD make_ip(QWORD* block_64)
 			61, 53, 45, 37, 29, 21, 13, 5,
 			63, 55, 47, 39, 31, 23, 15, 7
 	};
-	ip = make_bit_permutation(block_64, ip_table, 64);
+	ip = make_bit_permutation(block_64, ip_table,64, 64);
 	return ip;
 }
 
@@ -33,7 +33,7 @@ QWORD make_ip1(QWORD* block_64)
 		34, 2, 42, 10, 50, 18, 58, 26,
 		33, 1, 41, 9, 49, 17, 57, 25
 	};
-	ip1 = make_bit_permutation(block_64, ip_table, 64);
+	ip1 = make_bit_permutation(block_64, ip_table, 64, 64);
 	//ip1 = ip1 | ((*block_64 & 0x1000000) >> 24 - 0);						// 40
 	//ip1 = ip1 | ((*block_64 & 0x100000000000000) >> 56 - 1);				// 8
 	//ip1 = ip1 | ((*block_64 & 0x10000) >> 16 - 2);						 // 48
@@ -146,7 +146,7 @@ QWORD make_e(DWORD l)
 		24,  25,  26,  27,  28,  29,
 		28,  29,  30,  31,  32,  1
 	};
-	e = make_bit_permutation(&l, e_block, 48);
+	e = make_bit_permutation(&l, e_block, 32, 48);
 
 	//e = e | ((tmp_l & 0x40) >> 6 - 0);											  // 58
 
@@ -861,7 +861,7 @@ DWORD make_p(DWORD h_dash)
 		2, 8, 24, 14, 32, 27, 3, 9,
 		19, 13, 30, 6, 22, 11, 4, 25,
 	};
-	p = make_bit_permutation(&h_dash, p_block, 32);
+	p = make_bit_permutation(&h_dash, p_block, 32, 32);
 	//p = p | ((h_dash & 0x10000) >> (16 - 0));                       // 16
 	//p = p | ((h_dash & 0x2000000) >> (25 - 1));                     // 7
 	//p = p | ((h_dash & 0x1000) >> (12 - 2));                        // 20
@@ -1013,8 +1013,9 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 	std::cout << "key after correction: " << std::hex << key << std::endl;
 
 	// Выработка ключевых элементов
+	std::cout << std::endl << "==========KEYS GENERATION STARTS===========" << std::endl;
 	make_k_keys(key);
-
+	std::cout << std::endl << "==========KEY GENERATION ENDS===========" << std::endl;
 	// Зашифрование
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
 	int curBlock = 0;
@@ -1171,7 +1172,7 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 
 		// в котором выполняется конечная битовая перестановка IP–1 по аналогии с начальной.
 		QWORD c = 0;
-		std::cout << "T**: " << std::hex << &t_star_star << std::endl;
+		std::cout << "T**: " << std::hex << t_star_star << std::endl;
 		c = make_ip1(&t_star_star);
 		std::cout << "IP-1: " << std::hex << c << std::endl;
 		memmove((QWORD*)hDeCipherText + curBlock, &c, 8);

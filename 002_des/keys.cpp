@@ -35,7 +35,7 @@ void key_correction(LPVOID key)
 	key = (BYTE*)key - 8; // возврат указател€ в начало
 }
 
-QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
+QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int source_size, int table_size)
 {
 	LPVOID handle;
 	QWORD mask;
@@ -44,8 +44,13 @@ QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
 	int i = 0;
 	if (table_size == 56 || table_size == 48 || table_size == 64)
 	{
-		QWORD* qwordHandle = 0; 
-		qwordHandle = (QWORD*)hSource;
+		QWORD qwordBuffer = 0; 
+		qwordBuffer = *(QWORD*)hSource;
+
+		if (source_size == 32)
+		{
+			qwordBuffer = qwordBuffer << 32;
+		}
 
 		while (i < table_size)
 		{
@@ -61,11 +66,11 @@ QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
 			int shift = 63 - shiftCount - i;
 			// ставим элемент на i-ю позицию
 			if (shift >= 0)
-				result = result | ((*qwordHandle & mask) << shift);
+				result = result | ((qwordBuffer & mask) << shift);
 			else
 			{
 				shift = -shift;
-				result = result | ((*qwordHandle & mask) >> shift);
+				result = result | ((qwordBuffer & mask) >> shift);
 			}
 
 			i++;
@@ -116,7 +121,7 @@ QWORD make_pc1(QWORD* hKey)
 						14,	6,	61,	53,	45,	37,	29,
 						21,	13,	5,	28,	20,	12,	4 };
 
-	pc1_key = make_bit_permutation(hKey, pc1_table, 56);
+	pc1_key = make_bit_permutation(hKey, pc1_table,56, 56);
 	return pc1_key;
 }
 
@@ -171,7 +176,7 @@ void make_k_key(DWORD h, DWORD l, int k)
 		44,	49,	39,	56,	34,	53,
 		46,	42,	50,	36,	29,	32
 	};
-	tmpBuffer = make_bit_permutation(&hlUnion, pc2_table, 48);
+	tmpBuffer = make_bit_permutation(&hlUnion, pc2_table, 56, 48);
 
 	memmove(k_keys_buffer + k, (BYTE*)&tmpBuffer, 8); // размер - 6, но сделал 8 дл€ удобства
 }
@@ -183,6 +188,7 @@ void make_k_keys(QWORD key)
 	// котора€ отбирает 56 из 64 битов ключа и располагает их в другом пор€дке.
 	// ¬ таблице указываетс€ новое положение соответствующего бита.
 	QWORD pc1 = make_pc1(&key);
+	std::cout << "pc1: " << pc1 << std::endl;
 	DWORD h = 0, l = 0; // 28 битные буферы, последние 32-28=4 бита не используем
 	//–езультат выборки-перестановки K* раздел€етс€ на две 28-битовые половинки: старшую H1 и младшую L1
 	split_pc1(&pc1, h, l);
