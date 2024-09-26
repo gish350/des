@@ -44,7 +44,8 @@ QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
 	int i = 0;
 	if (table_size == 56 || table_size == 48 || table_size == 64)
 	{
-		QWORD* qwordHandle = (QWORD*)hSource;
+		QWORD* qwordHandle = 0; 
+		qwordHandle = (QWORD*)hSource;
 
 		while (i < table_size)
 		{
@@ -72,7 +73,8 @@ QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
 	}
 	else if (table_size == 32)
 	{
-		DWORD* qwordHandle = (DWORD*)hSource;
+		DWORD* dwordHandle = 0;
+		dwordHandle = (DWORD*)hSource;
 
 		while (i < table_size)
 		{
@@ -88,11 +90,11 @@ QWORD make_bit_permutation(LPVOID hSource, int perm_table[], int table_size)
 			int shift = 31 - shiftCount - i;
 			// ставим элемент на i-ю позицию
 			if (shift >= 0)
-				result = result | ((*qwordHandle & mask) << shift);
+				result = result | ((*dwordHandle & mask) << shift);
 			else
 			{
 				shift = -shift;
-				result = result | ((*qwordHandle & mask) >> shift);
+				result = result | ((*dwordHandle & mask) >> shift);
 			}
 
 			i++;
