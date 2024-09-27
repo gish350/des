@@ -962,12 +962,12 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 	//while (curBlock != 1)
 	{
 		//std::cout << std::endl << "====BLOCK: " << std::dec <<curBlock << " ====" << std::endl;
-		QWORD block_64 = *((QWORD*)cipher_text + curBlock);
+		QWORD block_64 = *((QWORD*)cipher_text + curBlock); // todo: вынести за цикл
 		//std::cout << "block: " << curBlock << " " << std::hex << block_64 << std::endl;
 		// Дешифрование 64-битового блока текста C начинается с начальной перестановки битов IP. 
 		// В таблице указывается новое положение соответствующего бита.
 		// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
-		QWORD t_star = 0;
+		QWORD t_star = 0;	// todo: вынести за цикл
 		t_star = make_ip(&block_64);
 		//std::cout << "T*: " << std::hex << t_star << std::endl;
 		// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
@@ -1030,6 +1030,40 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 	}
 	//std::cout << std::endl << "==========DECIPHERING ENDS===========" << std::endl;
 	return hDeCipherText;
+}
+
+BYTE* cbc_cipher(BYTE* plain_text, int text_size, QWORD key, QWORD init_vector)
+{
+	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
+	int curBlock = 1;
+	int nBlocks = text_size / 8;
+	QWORD t = 0;
+	QWORD xor_sum = 0;
+
+	t = *(QWORD*)plain_text;
+	//Первый блок T1 складывается по модулю 2 с 64-битовым вектором инициализации IV (синхропосылкой).
+	xor_sum = init_vector ^ t;
+
+	// Полученная сумма затем шифруется с использованием ключа K в режиме DES-ECB.
+	BYTE* hC = ecb_cipher((BYTE*)xor_sum, 8, key);
+	QWORD c = *hC;
+
+
+	while (curBlock < nBlocks) // Открытый текст разбивается на 64 - битовые блоки : T1, T2, ..., Tn.
+	{
+		// 64-битовый блок шифрограммы C1 складывается по модулю 2
+		// со вторым блоком открытого текста, результат шифруется и получается 
+		// второй 64-битовый блок шифрограммы С2, и т.д.
+		
+		t = *((QWORD*)plain_text + curBlock);
+		xor_sum = c ^ t;
+		hC = ecb_cipher((BYTE*)xor_sum, 8, key);
+		c = *hC;
+
+		memmove((QWORD*)hCipherText + curBlock, &c, 8);
+		curBlock++;
+	}
+	return hCipherText;
 }
 
 BYTE* ede3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD key3)

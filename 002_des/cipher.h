@@ -13,5 +13,6 @@ BYTE* ede3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD
 BYTE* ede3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWORD key3);
 BYTE* ede2_cipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2);
 BYTE* ede2_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2);
+BYTE* cbc_cipher(BYTE* plain_text, int text_size, QWORD key, QWORD init_vector);
 
 
