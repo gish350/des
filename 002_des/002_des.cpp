@@ -63,7 +63,7 @@ int main()
         {
             std::cout << "====DES-ECB====" << std::endl;
             std::cout << std::endl << "Enter key in hex (max 16 symbols): " << std::endl;
-            std::cin >> key;
+          //  std::cin >> key;
             hCipherText = ecb_cipher(hPlainText, newTextSize, key);
             std::cout << std::endl << "          =====DES-ECB (HEX)=====" << std::endl;
             dumpMemory(hCipherText, newTextSize);
@@ -71,7 +71,7 @@ int main()
             BYTE* hDeCipher = 0;
             hDeCipher = ecb_decipher(hCipherText, newTextSize, key);
             std::string decipher_ecb = memToStr(hDeCipher, newTextSize);
-            std::cout << std::endl << "          =====DES-ECB DECIPHERED ===== " << std::endl;
+            std::cout << std::endl << "          =====DES-ECB DECIPHERED=====" << std::endl;
             std::cout << decipher_ecb << std::endl;
             break;
         }
@@ -92,12 +92,17 @@ int main()
                     BYTE* hEee3_c = eee3_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE, 0xDEADDEADDEADDEAD);
                     BYTE* hEee3_decipher = eee3_decipher(hEee3_c, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE, 0xDEADDEADDEADDEAD);
                     std::string decipher_eee3 = memToStr(hEee3_decipher, newTextSize);
-                    std::cout << std::endl << "          =====DES-EEE3 DECIPHERED ===== " << std::endl;
+                    std::cout << std::endl << "          =====DES-EEE3 DECIPHERED===== " << std::endl;
                     std::cout << decipher_eee3 << std::endl;
                     break;
                 }
                 case 2:
                 {
+                    BYTE* hEde3_c = ede3_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE, 0xDEADDEADDEADDEAD);
+                    BYTE* hEde3_decipher = ede3_decipher(hEde3_c, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE, 0xDEADDEADDEADDEAD);
+                    std::string decipher_ede3 = memToStr(hEde3_decipher, newTextSize);
+                    std::cout << std::endl << "          =====DES-EDE3 DECIPHERED===== " << std::endl;
+                    std::cout << decipher_ede3 << std::endl;
                     break;
                 }
                 case 3:
@@ -105,12 +110,17 @@ int main()
                     BYTE* hEee2_c = eee2_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE);
                     BYTE* hEee2_decipher = eee2_decipher(hEee2_c, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE);
                     std::string decipher_eee2 = memToStr(hEee2_decipher, newTextSize);
-                    std::cout << std::endl << "          =====DES-EEE2 DECIPHERED ===== " << std::endl;
+                    std::cout << std::endl << "          =====DES-EEE2 DECIPHERED===== " << std::endl;
                     std::cout << decipher_eee2 << std::endl;
                     break;
                 }
                 case 4:
                 {
+                    BYTE* hEde2_c = ede2_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE);
+                    BYTE* hEde2_decipher = ede2_decipher(hEde2_c, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE);
+                    std::string decipher_ede2 = memToStr(hEde2_decipher, newTextSize);
+                    std::cout << std::endl << "          =====DES-EDE2 DECIPHERED===== " << std::endl;
+                    std::cout << decipher_ede2 << std::endl;
                     break;
                 }
             }
@@ -118,7 +128,7 @@ int main()
         }
         case 3:
         {
-            std::cout << "====Triple-DES====" << std::endl;
+            
             break;
         }
         case 0:

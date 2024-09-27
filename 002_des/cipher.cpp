@@ -887,7 +887,7 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 		QWORD k;
 		if (curBlock ==0)
 			std::cout << std::endl << "==========FEISTEL LOOP STARTS===========" << std::endl;
-			std::cout << "==========only first iteration===========" << std::endl;
+			//std::cout << "==========only first iteration===========" << std::endl;
 		while (j < 15)
 		{
 			l_tmp = 0;
@@ -1038,26 +1038,26 @@ BYTE* ede3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD
 	BYTE* c1 = 0;
 	c1 = ecb_cipher(plain_text, text_size, key1);
 
-	// Второй этап : Дешифруем результат первого этапа с тем же ключом
+	// Дешифруем результат первого этапа с тем же ключом
 	BYTE* m1 = 0;
 	m1 = ecb_decipher(c1, text_size, key1);
 
-	// Третий этап: Повторно шифруем полученное значение вторым ключом
+	// Второй этап: шифруем полученное значение вторым ключом
 	BYTE* c2 = 0;
 	c2 = ecb_cipher(m1, text_size, key2);
 
-	// Четвертый этап: Еще раз дешифруем вторым ключом:
+	// дешифруем вторым ключом:
 	BYTE* m2 = 0;
 	m2 = ecb_decipher(c2, text_size, key2);
 
-	// Пятый этап : Наконец, шифруем сообщение с третьим ключом
+	// Третий этап: Шифруем сообщение с третьим ключом
 	BYTE* c3 = 0;
 	c3 = ecb_cipher(m2, text_size, key3);
 
 	return c3;
 }
 
-void ede3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
+BYTE* ede3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
 {
 	// Первый этап: Используется третий ключ для дешифрования зашифрованного текста
 	BYTE* p1 = 0;
@@ -1067,14 +1067,71 @@ void ede3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWO
 	BYTE* m1 = 0;
 	m1 = ecb_cipher(p1, text_size, key2);
 
-	//Третий этап: Повторно используем второй ключ для дешифрации 
+	// Повторно используем второй ключ для дешифрации 
 	BYTE* p2 = 0;
 	p2 = ecb_decipher(m1, text_size, key2);
 
-	// Четвертый этап: Используем первый ключ для шифрования
+	// Третий этап: Используем первый ключ для шифрования
+	BYTE* m3 = 0;
+	m3 = ecb_cipher(p2, text_size, key1);
 	BYTE* m2 = 0;
 
+	// Используем первый ключ для расшифрования
+	BYTE* p3 = 0;
+	p3 = ecb_decipher(m3, text_size, key1);
+	
+	return p3;
+}
 
+BYTE* ede2_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2)
+{
+	// Первый этап: Зашифровываем сообщение с первым ключом 
+	BYTE* c1 = 0;
+	c1 = ecb_cipher(plain_text, text_size, key1);
+
+	// Дешифруем результат первого этапа с тем же ключом
+	BYTE* m1 = 0;
+	m1 = ecb_decipher(c1, text_size, key1);
+
+	// Второй этап: шифруем полученное значение вторым ключом
+	BYTE* c2 = 0;
+	c2 = ecb_cipher(m1, text_size, key2);
+
+	// дешифруем вторым ключом:
+	BYTE* m2 = 0;
+	m2 = ecb_decipher(c2, text_size, key2);
+
+	// Третий этап: Шифруем сообщение с третьим ключом
+	BYTE* c3 = 0;
+	c3 = ecb_cipher(m2, text_size, key1);
+
+	return c3;
+}
+
+BYTE* ede2_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2)
+{
+	// Первый этап: Используется третий ключ для дешифрования зашифрованного текста
+	BYTE* p1 = 0;
+	p1 = ecb_decipher(cipher_text, text_size, key1);
+
+	// Второй этап: Затем используется второй ключ для шифрования промежуточного значения
+	BYTE* m1 = 0;
+	m1 = ecb_cipher(p1, text_size, key2);
+
+	// Повторно используем второй ключ для дешифрации 
+	BYTE* p2 = 0;
+	p2 = ecb_decipher(m1, text_size, key2);
+
+	// Третий этап: Используем первый ключ для шифрования
+	BYTE* m3 = 0;
+	m3 = ecb_cipher(p2, text_size, key1);
+	BYTE* m2 = 0;
+
+	// Используем первый ключ для расшифрования
+	BYTE* p3 = 0;
+	p3 = ecb_decipher(m3, text_size, key1);
+
+	return p3;
 }
 
 BYTE* eee3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
