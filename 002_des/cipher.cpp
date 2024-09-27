@@ -1031,3 +1031,80 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 	//std::cout << std::endl << "==========DECIPHERING ENDS===========" << std::endl;
 	return hDeCipherText;
 }
+
+BYTE* ede3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
+{
+	// Первый этап: Зашифровываем сообщение с первым ключом 
+	BYTE* c1 = 0;
+	c1 = ecb_cipher(plain_text, text_size, key1);
+
+	// Второй этап : Дешифруем результат первого этапа с тем же ключом
+	BYTE* m1 = 0;
+	m1 = ecb_decipher(c1, text_size, key1);
+
+	// Третий этап: Повторно шифруем полученное значение вторым ключом
+	BYTE* c2 = 0;
+	c2 = ecb_cipher(m1, text_size, key2);
+
+	// Четвертый этап: Еще раз дешифруем вторым ключом:
+	BYTE* m2 = 0;
+	m2 = ecb_decipher(c2, text_size, key2);
+
+	// Пятый этап : Наконец, шифруем сообщение с третьим ключом
+	BYTE* c3 = 0;
+	c3 = ecb_cipher(m2, text_size, key3);
+
+	return c3;
+}
+
+void ede3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
+{
+	// Первый этап: Используется третий ключ для дешифрования зашифрованного текста
+	BYTE* p1 = 0;
+	p1 = ecb_decipher(cipher_text, text_size, key3);
+
+	// Второй этап: Затем используется второй ключ для шифрования промежуточного значения
+	BYTE* m1 = 0;
+	m1 = ecb_cipher(p1, text_size, key2);
+
+	//Третий этап: Повторно используем второй ключ для дешифрации 
+	BYTE* p2 = 0;
+	p2 = ecb_decipher(m1, text_size, key2);
+
+	// Четвертый этап: Используем первый ключ для шифрования
+	BYTE* m2 = 0;
+
+
+}
+
+BYTE* eee3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
+{
+	BYTE* layer1 = ecb_cipher(plain_text, text_size, key1);
+	BYTE* layer2 = ecb_cipher(layer1, text_size, key2);
+	BYTE* layer3 = ecb_cipher(layer2, text_size, key3);
+	return layer3;
+}
+
+BYTE* eee3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWORD key3)
+{
+	BYTE* layer3 = ecb_decipher(cipher_text, text_size, key3);
+	BYTE* layer2 = ecb_decipher(layer3, text_size, key2);
+	BYTE* layer1 = ecb_decipher(layer2, text_size, key1);
+	return layer1;
+}
+
+BYTE* eee2_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2)
+{
+	BYTE* layer1 = ecb_cipher(plain_text, text_size, key1);
+	BYTE* layer2 = ecb_cipher(layer1, text_size, key2);
+	BYTE* layer3 = ecb_cipher(layer2, text_size, key1);
+	return layer3;
+}
+
+BYTE* eee2_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2)
+{
+	BYTE* layer3 = ecb_decipher(cipher_text, text_size, key1);
+	BYTE* layer2 = ecb_decipher(layer3, text_size, key2);
+	BYTE* layer1 = ecb_decipher(layer2, text_size, key1);
+	return layer1;
+}

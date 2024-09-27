@@ -5,5 +5,9 @@
 
 BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key);
 BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key);
+BYTE* eee3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD key3);
+BYTE* eee3_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2, QWORD key3);
+BYTE* eee2_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2);
+BYTE* eee2_decipher(BYTE* cipher_text, int text_size, QWORD key1, QWORD key2);
 
 
