@@ -855,7 +855,7 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 	// Выработка ключевых элементов
 	std::cout << std::endl << "==========KEYS GENERATION STARTS===========" << std::endl;
 	make_k_keys(key);
-	std::cout << std::endl << "==========KEY GENERATION ENDS===========" << std::endl;
+	std::cout << "==========KEY GENERATION ENDS===========" << std::endl;
 	// Зашифрование
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
 	int curBlock = 0;
@@ -898,9 +898,11 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 			//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k); 
 			if (curBlock == 0)
-				std::cout << std::endl << "H" << j << ": " << h << "	L" << j << ": " << l << std::endl;
+				std::cout << std::endl << "H" << j << ": " << h << "	L" << j << ": " << l << "	f(k,L): " << f_result <<";";
 			l_tmp = l;
 			l = h ^ f_result;
+			if (curBlock == 0)
+				std::cout << " H xor f(k,L): " << l << std::endl;
 			h = l_tmp;
 			//std::cout << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			j++;
@@ -913,10 +915,12 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 
 		k = *((QWORD*)k_keys_buffer + j);
 		//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
-		if (curBlock == 0)
-			std::cout << std::endl << "H" <<j << ": " <<h << "	L" << j <<": " << l << std::endl;
+		
 		f_result = make_f(l, k); 
+		if (curBlock == 0)
+			std::cout << std::endl << "H" << j << ": " << h << "	L" << j << ": " << l << "	f(k,L): " << f_result << ";";
 		h = h ^ f_result;
+		std::cout << " H xor f(k,L): " << h << std::endl;
 		//std::cout  << "after iteration: " << j << " h: " << h << "  l: " << l << " k: " << k <<  " f_result: " << f_result <<std::endl;
 		//std::cout << std::endl << "=FEISTEL ENDS=" << std::endl;
 		if (curBlock == 0)
@@ -946,7 +950,8 @@ BYTE* ecb_cipher(BYTE* plain_text, int text_size, QWORD key)
 
 BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 {
-	//std::cout << std::endl << "==========DECIPHERING STARTS===========" << std::endl;
+	
+	//	std::cout << std::endl << "==========DECIPHERING STARTS===========" << std::endl;
 
 	//std::cout << "key before correction: " << std::hex << key << std::endl;
 	key_correction(&key);
@@ -969,6 +974,8 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		// Таким образом, при выполнении начальной перестановки 58-ый бит станет 1-ым, 50-ый – 2-ым, 42-ой – 3-им и т.д.
 		QWORD t_star = 0;	// todo: вынести за цикл
 		t_star = make_ip(&block_64);
+		if (curBlock == 0)
+			std::cout << std::endl << "IP: " << t_star << std::endl;
 		//std::cout << "T*: " << std::hex << t_star << std::endl;
 		// Результат перестановки Т* разделяется на две 32 - битовые половинки H1 и L1, 
 		DWORD h = 0, l = 0;
@@ -989,6 +996,8 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 			k = *(((QWORD*)k_keys_buffer + j));
 			//std::cout << std::endl << "before iteration: " << j << " h: " << h << "  l: " << l << " k: " << k << " f_result: " << f_result << std::endl;
 			f_result = make_f(l, k);
+			if (curBlock == 0)
+				std::cout << std::endl << "H" << j << ": " << h << "	L" << j << ": " << l << "	f(k,L): " << f_result << ";";
 			l_tmp = l;
 			l = h ^ f_result;
 			h = l_tmp;
@@ -1023,6 +1032,8 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 		QWORD c = 0;
 		//std::cout << "T**: " << std::hex << t_star_star << std::endl;
 		c = make_ip1(&t_star_star);
+		if (curBlock == 0)
+			std::cout << std::endl << "IP-1: " << c << std::endl;
 		//std::cout << "IP-1: " << std::hex << c << std::endl;
 		memmove((QWORD*)hDeCipherText + curBlock, &c, 8);
 

@@ -62,8 +62,8 @@ int main()
         case 1:
         {
             std::cout << "====DES-ECB====" << std::endl;
-            std::cout << std::endl << "Enter key in hex (max 16 symbols): " << std::endl;
-          //  std::cin >> key;
+            std::cout << std::endl << "Enter the key in dec (max 16 digits in hex): " << std::endl;
+            std::cin >> key;
             hCipherText = ecb_cipher(hPlainText, newTextSize, key);
             std::cout << std::endl << "          =====DES-ECB (HEX)=====" << std::endl;
             dumpMemory(hCipherText, newTextSize);
