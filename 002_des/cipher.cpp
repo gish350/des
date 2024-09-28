@@ -1035,22 +1035,28 @@ BYTE* ecb_decipher(BYTE* cipher_text, int text_size, QWORD key)
 BYTE* cbc_cipher(BYTE* plain_text, int text_size, QWORD key, QWORD init_vector)
 {
 	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
-	int curBlock = 1;
+	int curBlock = 0;
 	int nBlocks = text_size / 8;
 	QWORD t = 0;
 	QWORD xor_sum = 0;
+	QWORD c = 0;
+	BYTE* hC = 0;
 
 	t = *(QWORD*)plain_text;
 	//Первый блок T1 складывается по модулю 2 с 64-битовым вектором инициализации IV (синхропосылкой).
 	xor_sum = init_vector ^ t;
 
 	// Полученная сумма затем шифруется с использованием ключа K в режиме DES-ECB.
-	BYTE* hC = ecb_cipher((BYTE*)&xor_sum, 8, key);
-	QWORD c = *hC;
+	hC = ecb_cipher((BYTE*)&xor_sum, 8, key);
+	c = *(QWORD*)hC;
+	memmove((QWORD*)hCipherText + curBlock, &c, 8);
+	curBlock++;
 
-
-	while (curBlock < nBlocks && curBlock != 0) // Открытый текст разбивается на 64 - битовые блоки : T1, T2, ..., Tn.
+	while (curBlock < nBlocks) // Открытый текст разбивается на 64 - битовые блоки : T1, T2, ..., Tn.
 	{
+		t = 0;
+		xor_sum = 0;
+		hC = 0;
 		// 64-битовый блок шифрограммы C1 складывается по модулю 2
 		// со вторым блоком открытого текста, результат шифруется и получается 
 		// второй 64-битовый блок шифрограммы С2, и т.д.
@@ -1058,7 +1064,7 @@ BYTE* cbc_cipher(BYTE* plain_text, int text_size, QWORD key, QWORD init_vector)
 		t = *((QWORD*)plain_text + curBlock);
 		xor_sum = c ^ t;
 		hC = ecb_cipher((BYTE*)&xor_sum, 8, key);
-		c = *hC;
+		c = *(QWORD*)hC;
 
 		memmove((QWORD*)hCipherText + curBlock, &c, 8);
 		curBlock++;
@@ -1068,35 +1074,45 @@ BYTE* cbc_cipher(BYTE* plain_text, int text_size, QWORD key, QWORD init_vector)
 
 BYTE* cbc_decipher(BYTE* cipher_text, int text_size, QWORD key, QWORD init_vector)
 {
-	BYTE* hCipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
-	int curBlock = 1;
+	BYTE* hDecipherText = (BYTE*)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, text_size);
+	int curBlock = 0;
 	int nBlocks = text_size / 8;
 	QWORD c = 0;
-	QWORD xor_sum = 0;
+	QWORD t = 0;
+	QWORD ecbResult = 0;
+	BYTE* hEcbResult = 0;
+	QWORD c_prev = 0;
 
 	c = *(QWORD*)cipher_text;
 	
-	BYTE* hEcbResult = ecb_cipher((BYTE*)&c, 8, key);
-	QWORD ecbResult = *hEcbResult;
+	hEcbResult = ecb_decipher((BYTE*)&c, 8, key);
+	ecbResult = *(QWORD*)hEcbResult;
 
-	QWORD t = init_vector ^ ecbResult;
+	t = init_vector ^ ecbResult;
+
+	memmove((QWORD*)hDecipherText + curBlock, &t, 8);
+	curBlock++;
 
 	while (curBlock < nBlocks) // Открытый текст разбивается на 64 - битовые блоки : T1, T2, ..., Tn.
 	{
+		ecbResult = 0;
+		t = 0;
+		c = 0;
+
 		// 64-битовый блок шифрограммы C1 складывается по модулю 2
 		// со вторым блоком открытого текста, результат шифруется и получается 
 		// второй 64-битовый блок шифрограммы С2, и т.д.
 
 		c = *((QWORD*)cipher_text + curBlock);
-		hEcbResult = ecb_decipher((BYTE*)&xor_sum, 8, key);
-		c = *hEcbResult;
-		xor_sum = c ^ c;
-		
+		hEcbResult = ecb_decipher((BYTE*)&c, 8, key);
+		ecbResult = *(QWORD*)hEcbResult;
+		c_prev = *((QWORD*)cipher_text + curBlock - 1);
+		t = c_prev ^ ecbResult;
 
-		memmove((QWORD*)hCipherText + curBlock, &c, 8);
+		memmove((QWORD*)hDecipherText + curBlock, &t, 8);
 		curBlock++;
 	}
-	return hCipherText;
+	return hDecipherText;
 }
 
 BYTE* ede3_cipher(BYTE* plain_text, int text_size, QWORD key1, QWORD key2, QWORD key3)

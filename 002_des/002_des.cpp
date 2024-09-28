@@ -131,10 +131,10 @@ int main()
             srand(time(NULL));
             int init_vector = rand();
             BYTE* hCbc_c = cbc_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, init_vector);
-          //  BYTE* hCbc_decipher = cbc_decipher(hCbc_c, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE);
-        //    std::string decipher_cbc = memToStr(hCbc_decipher, newTextSize);
+            BYTE* hCbc_decipher = cbc_decipher(hCbc_c, newTextSize, 0xBEEFBEEFBEEFBEEF, init_vector);
+            std::string decipher_cbc = memToStr(hCbc_decipher, newTextSize);
             std::cout << std::endl << "          =====DES-CBC DECIPHERED===== " << std::endl;
-         //   std::cout << decipher_cbc << std::endl;
+            std::cout << decipher_cbc << std::endl;
             break;
         }
         case 0:
