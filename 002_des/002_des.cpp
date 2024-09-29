@@ -3,31 +3,18 @@
 #include <winDNS.h>
 #include <iostream>
 #include "cipher.h"
-#include <iomanip>
+
 
 
 #define TRUNC(a, b) (a + (b - ((a % b) ? (a % b) : b)))
 
-std::string memToStr(const void* memory, size_t size) 
+std::string memToStr(const void* memory, size_t size)
 {
     const char* temp = static_cast<const char*>(memory);
     std::string str(temp, size);
     return str;
 }
 
-void dumpMemory(const void* ptr, size_t length) {
-    const unsigned char* bytes = reinterpret_cast<const unsigned char*>(ptr);
-    size_t index = 0;
-
-    while (index < length) {
-        std::cout << std::hex << std::setfill('0');
-        for (size_t i = 0; i < 16 && index + i < length; ++i) {
-            std::cout << std::setw(2) << (int)(bytes[index + i]) << ' ';
-        }
-        std::cout << std::dec << std::setfill(' ') << std::endl;
-        index += 16;
-    }
-}
 
 int main()
 {
@@ -37,6 +24,9 @@ int main()
     std::string plain_text;
     // plain_text = "Alexey Fyodorovitch Karamazov was the third son of Fyodor Pavlovitch Karamazov, a land owner well known in our district in his own day, and still remembered among us owing to his gloomy and tragic death, which happened thirteen years ago, and which I shall describe in its proper place. For the present I will only say that this “landowner”—for so we used to call him, although he hardly spent a day of his life on his own estate—was a strange type, yet one pretty frequently to be met with, a type abject and vicious and at the same time senseless. But he was one of those senseless persons who are very well capable of looking after their worldly affairs, and, apparently, after nothing else. Fyodor Pavlovitch, for instance, began with next to nothing; his estate was of the smallest; he ran to dine at other men’s tables, and fastened on them as a toady, yet at his death it appeared that he had a hundred thousand roubles in hard cash. At the same time, he was all his life one of the most senseless, fantastical fellows in the whole district. I repeat, it was not stupidity—the majority of these fantastical fellows are shrewd and intelligent enough—but just senselessness, and a peculiar national form of it.";
     QWORD key = 0xBEEFBABECAFEBABE;
+    QWORD key1 = 0;
+    QWORD key2 = 0;
+    QWORD key3 = 0;
     std::getline(std::cin, plain_text);
 
     DWORD text_size = plain_text.length();
@@ -88,9 +78,17 @@ int main()
             {
                 case 1:
                 {
+                    std::cout << std::endl << "Enter the  1-st key in dec (max 16 digits in hex): " << std::endl;
+                    std::cin >> key1;
+
+                    std::cout << "Enter the 2-nd key in dec (max 16 digits in hex): " << std::endl;
+                    std::cin >> key2;
+
+                    std::cout << "Enter the 3-rd key in dec (max 16 digits in hex): " << std::endl;
+                    std::cin >> key3;
                     
-                    BYTE* hEee3_c = eee3_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE, 0xDEADDEADDEADDEAD);
-                    BYTE* hEee3_decipher = eee3_decipher(hEee3_c, newTextSize, 0xBEEFBEEFBEEFBEEF, 0xCAFECAFECAFECAFE, 0xDEADDEADDEADDEAD);
+                    BYTE* hEee3_c = eee3_cipher(hPlainText, newTextSize, key1, key2, key3);
+                    BYTE* hEee3_decipher = eee3_decipher(hEee3_c, newTextSize, key1, key2, key3);
                     std::string decipher_eee3 = memToStr(hEee3_decipher, newTextSize);
                     std::cout << std::endl << "          =====DES-EEE3 DECIPHERED===== " << std::endl;
                     std::cout << decipher_eee3 << std::endl;
@@ -130,8 +128,11 @@ int main()
         {
             srand(time(NULL));
             int init_vector = rand();
-            BYTE* hCbc_c = cbc_cipher(hPlainText, newTextSize, 0xBEEFBEEFBEEFBEEF, init_vector);
-            BYTE* hCbc_decipher = cbc_decipher(hCbc_c, newTextSize, 0xBEEFBEEFBEEFBEEF, init_vector);
+            std::cout << std::endl << "Enter the key in dec (max 16 digits in hex): " << std::endl;
+            std::cin >> key;
+            std::cout << std::endl << "Init. vector: " << init_vector << std::endl;
+            BYTE* hCbc_c = cbc_cipher(hPlainText, newTextSize, key, init_vector);
+            BYTE* hCbc_decipher = cbc_decipher(hCbc_c, newTextSize, key, init_vector);
             std::string decipher_cbc = memToStr(hCbc_decipher, newTextSize);
             std::cout << std::endl << "          =====DES-CBC DECIPHERED===== " << std::endl;
             std::cout << decipher_cbc << std::endl;
